@@ -1,0 +1,81 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Alif" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+
+        <item name="colorPrimaryContainer">@color/primary_10</item>
+        <item name="colorOnPrimaryContainer">@color/primary</item>
+
+        <item name="android:windowBackground">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="colorSecondaryContainer">@color/black_60</item>
+
+        <item name="colorTertiary">@color/white</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="iconNavColor">@color/black</item>
+        <item name="bgIconNavColor">@color/black_10</item>
+        <item name="materialTimePickerTheme">@style/AlifTimePicker</item>
+    </style>
+
+    <style name="Theme.Alif.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+
+        <item name="colorPrimaryContainer">@color/white_20</item>
+        <item name="colorOnPrimaryContainer">@color/secondary_light</item>
+
+        <item name="colorOnContainer">@color/white</item>
+
+        <item name="android:windowBackground">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/primary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:titleTextColor" tools:targetApi="m">@color/primary</item>
+        <item name="iconNavColor">@color/black</item>
+        <item name="bgIconNavColor">@color/black_10</item>
+        <item name="materialTimePickerTheme">@style/AlifTimePicker</item>
+    </style>
+
+    <style name="AlifTimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+
+        <item name="colorPrimaryContainer">@color/primary_10</item>
+        <item name="colorOnPrimaryContainer">@color/primary</item>
+
+        <item name="android:windowBackground">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="colorSecondaryContainer">@color/black_60</item>
+
+        <item name="colorTertiary">@color/white</item>
+        <item name="colorOnTertiary">@color/white</item>
+
+        <item name="colorTertiaryContainer">@color/primary</item>
+        <item name="colorOnTertiaryContainer">@color/white</item>
+
+        <item name="colorSurface">@color/white</item>
+        <item name="colorSurfaceVariant">@color/white</item>
+    </style>
+</resources>

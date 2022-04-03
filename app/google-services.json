@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "225862744013",
+    "project_id": "alif-muslim",
+    "storage_bucket": "alif-muslim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225862744013:android:4091876280ffd9e29d3684",
+        "android_client_info": {
+          "package_name": "id.derysudrajat.alif"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225862744013-oprtcedvaofjosh51oh1lr3pcujj6puu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXcE8bvman5Ic69sTVz6_Id0RFlKsEbx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225862744013-oprtcedvaofjosh51oh1lr3pcujj6puu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
