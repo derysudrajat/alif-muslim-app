@@ -1,11 +1,13 @@
 package id.derysudrajat.alif.ui.activity
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.repo.PrayerRepository
+import id.derysudrajat.alif.service.PrayerAlarm
 import id.derysudrajat.alif.utils.TimeUtils.formatDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProgressActivityViewModel @Inject constructor(
-    val repository: PrayerRepository
+    val repository: PrayerRepository,
+    private val alarm: PrayerAlarm
 ) : ViewModel() {
 
     private val scope = viewModelScope
@@ -37,7 +40,8 @@ class ProgressActivityViewModel @Inject constructor(
         }
     }
 
-    fun deleteTask(position: Int) {
+    fun deleteTask(context: Context, position: Int) {
+        alarm.cancelActivityAlarm(context, currentActivity[position])
         scope.launch { repository.deleteProgressTask(currentActivity[position]) }
             .also { getTodayActivity() }
     }

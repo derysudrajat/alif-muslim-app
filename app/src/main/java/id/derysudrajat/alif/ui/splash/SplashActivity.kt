@@ -1,14 +1,13 @@
 package id.derysudrajat.alif.ui.splash
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import id.derysudrajat.alif.ui.main.MainActivity
 import id.derysudrajat.alif.databinding.ActivitySplashBinding
+import id.derysudrajat.alif.ui.main.MainActivity
 import id.derysudrajat.alif.utils.LocationUtils
 
 @SuppressLint("CustomSplashScreen")

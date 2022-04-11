@@ -1,14 +1,13 @@
 package id.derysudrajat.alif.repo
 
 import android.util.Log
-import com.google.firebase.Timestamp
 import id.derysudrajat.alif.data.model.*
 import id.derysudrajat.alif.data.repository.DataRepositoryImpl
 import id.derysudrajat.alif.repo.local.LocalDataSource
+import id.derysudrajat.alif.repo.local.entity.ProgressTaskEntity
 import id.derysudrajat.alif.repo.local.entity.toPayerReminders
 import id.derysudrajat.alif.repo.local.entity.toProgressTask
 import id.derysudrajat.alif.repo.remote.RemoteDataSource
-import id.derysudrajat.alif.utils.TimeUtils.formatDate
 import id.derysudrajat.alif.utils.TimeUtils.indexOfDay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -36,12 +35,18 @@ class PrayerRepository @Inject constructor(
 
     override suspend fun getProgressTask(date: String): Flow<List<ProgressTask>> = flow {
         localDataSource.getCheckedTask(date).collect { checkedTask ->
-            localDataSource.getAllProgressTask().map { entities ->
-                entities.filter { it.repeating.contains(Regex("([$indexOfDay,7,-1])")) }
-                    .filter { if (!it.repeating.contains("7")) it.date == Timestamp.now().formatDate else it.title.isNotBlank() }
-                    .sortedBy { it.date }.toProgressTask(checkedTask)
-            }.collect { emit(it) }
+            localDataSource.getAllProgressTask().collect {entity ->
+                emit(entity.filter { it.filterDay() }.sortedBy { it.dateLong }.toProgressTask(checkedTask))
+            }
         }
+    }
+
+    private fun ProgressTaskEntity.filterDay(): Boolean {
+        var isContain = false
+        this.repeating.split(" ").forEach {
+            if (it.isNotBlank()) isContain = listOf(indexOfDay,7,-1).contains(it.toInt())
+        }
+        return isContain
     }
 
     override suspend fun addProgressTask(task: ProgressTask) {

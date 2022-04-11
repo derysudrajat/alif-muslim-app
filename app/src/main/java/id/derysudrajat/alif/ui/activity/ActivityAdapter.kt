@@ -30,6 +30,7 @@ class ActivityAdapter(
                     if (data.isCheck) R.color.primary else R.color.black_60
                 )
             }
+            ivCheck.setOnClickListener { onChecked(data.id, !data.isCheck) }
             btnCheck.setOnClickListener { onChecked(data.id, !data.isCheck) }
         }
     }

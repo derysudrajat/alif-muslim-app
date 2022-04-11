@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
         countDownTimer.onFinish()
         val prayerReminder = PrayerReminder(position, prayerTime, isReminded)
         if (isReminded) prayerAlarm.setPrayerAlarm(context, prayerReminder)
-        else prayerAlarm.cancelAlarm(context, prayerReminder)
+        else prayerAlarm.cancelAlarm(context, prayerReminder.index)
         viewModelScope.launch {
             repository.updateReminder(PrayerReminder(position, prayerTime, isReminded))
             getReminderPrayer(timingSchedule)

@@ -2,7 +2,6 @@ package id.derysudrajat.alif.utils
 
 import android.text.format.DateFormat
 import com.google.firebase.Timestamp
-import id.derysudrajat.alif.utils.TimeUtils.stringFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,7 +31,7 @@ object TimeUtils {
         set(Calendar.DAY_OF_MONTH, day)
     }
     val indexOfDay get() : Int {
-        val daysOfWeek = mutableListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        val daysOfWeek = mutableListOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         return daysOfWeek.indexOf(Timestamp.now().dayOfWeek)
     }
 }

@@ -59,8 +59,9 @@ class AddProgressActivity : AppCompatActivity() {
             btnTime.setOnClickListener { showDatePicker() }
             btnCreateActivity.setOnClickListener {
                 viewModel.addTask(
+                    this@AddProgressActivity,
                     ProgressTask(
-                        Random.nextLong(123, 1234567) * 7 * TimeUtils.indexOfDay,
+                        Random.nextLong(123, 1234567) * 7 * (TimeUtils.indexOfDay+1),
                         edtTitle.text.toString(),
                         selectedTime.time.time,
                         "",

@@ -1,6 +1,5 @@
 package id.derysudrajat.alif.utils
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.faltenreich.skeletonlayout.Skeleton
 import com.faltenreich.skeletonlayout.applySkeleton
@@ -12,7 +11,7 @@ object SkeletonUtils {
         return skeleton
     }
 
-    fun Skeleton.configure(){
+    fun Skeleton.configure() {
         this.apply {
             maskCornerRadius = 50f
             showShimmer = true

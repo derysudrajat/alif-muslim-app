@@ -7,22 +7,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
-import com.faltenreich.skeletonlayout.Skeleton
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
-import id.derysudrajat.alif.R
 import id.derysudrajat.alif.data.model.Schedule
 import id.derysudrajat.alif.databinding.ActivityCalendarBinding
 import id.derysudrajat.alif.ui.main.HomeViewModel
 import id.derysudrajat.alif.utils.LocationUtils
 import id.derysudrajat.alif.utils.LocationUtils.checkLocationPermission
-import id.derysudrajat.alif.utils.SkeletonUtils.buildSkeleton
 import id.derysudrajat.alif.utils.TimeUtils.getCalendar
 import id.derysudrajat.alif.utils.TimeUtils.stringFormat
 import id.derysudrajat.alif.utils.TimeUtils.timeStamp
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -58,7 +54,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun setupAppbar() = binding.actionBar.apply {
-        tvTitle.text = "Calendar"
+        tvTitle.text = buildString { append("Calendar") }
         btnBack.setOnClickListener { finish() }
     }
 

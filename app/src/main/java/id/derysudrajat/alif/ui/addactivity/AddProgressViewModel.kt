@@ -1,17 +1,20 @@
 package id.derysudrajat.alif.ui.addactivity
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.repo.PrayerRepository
+import id.derysudrajat.alif.service.PrayerAlarm
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddProgressViewModel @Inject constructor(
-    private val repository: PrayerRepository
+    private val repository: PrayerRepository,
+    private val alarm: PrayerAlarm
 ) : ViewModel() {
 
     private val listActive = mutableListOf(-1, -1, -1, -1, -1, -1, -1)
@@ -39,8 +42,9 @@ class AddProgressViewModel @Inject constructor(
         }
     }
 
-    fun addTask(task: ProgressTask) {
+    fun addTask(context: Context, task: ProgressTask) {
         task.repeating = getRepeatingTask()
+        alarm.setActivityAlarm(context, task, true)
         scope.launch { repository.addProgressTask(task) }
     }
 

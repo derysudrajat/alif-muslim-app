@@ -2,12 +2,10 @@ package id.derysudrajat.alif.ui.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.*
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
-import id.derysudrajat.alif.R
 import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.databinding.ActivityProgressBinding
 import id.derysudrajat.alif.ui.addactivity.AddProgressActivity
@@ -77,7 +74,7 @@ class ProgressActivity : AppCompatActivity() {
     }
 
     private fun setupAppBar() = binding.appBar.apply {
-        tvTitle.text = "Activity"
+        tvTitle.text = buildString { append("Activity") }
         btnBack.setOnClickListener {
             setResult(RESULT_OK)
             finish()
@@ -98,7 +95,7 @@ class ProgressActivity : AppCompatActivity() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             override fun onMove(v: RecyclerView, h: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
             override fun onSwiped(h: RecyclerView.ViewHolder, dir: Int) {
-                viewModel.deleteTask(h.absoluteAdapterPosition)
+                viewModel.deleteTask(this@ProgressActivity, h.absoluteAdapterPosition)
             }
         }).attachToRecyclerView(binding.rvActivity)
     }

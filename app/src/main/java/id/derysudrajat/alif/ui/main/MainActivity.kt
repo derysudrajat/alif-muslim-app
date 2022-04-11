@@ -57,8 +57,10 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         checkLocationPermission { requestLocationPermission() }
         fusedLocationClient.lastLocation.addOnSuccessListener {
-            populateAddress(it)
-            homeViewModel.getPrayerSchedule(it.latitude, it.longitude, Timestamp.now())
+            it?.let { location ->
+                populateAddress(location)
+                homeViewModel.getPrayerSchedule(location.latitude, location.longitude, Timestamp.now())
+            }
         }
         activityViewModel.getTodayActivity()
 

@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,20 +12,23 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import id.derysudrajat.alif.R
 import id.derysudrajat.alif.data.model.PrayerReminder
+import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.data.model.hour
 import id.derysudrajat.alif.data.model.minutes
 import id.derysudrajat.alif.repo.PrayerRepository
 import id.derysudrajat.alif.ui.main.MainActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import id.derysudrajat.alif.utils.TimeUtils
+import id.derysudrajat.alif.utils.TimeUtils.day
+import id.derysudrajat.alif.utils.TimeUtils.hour
+import id.derysudrajat.alif.utils.TimeUtils.hourMinutes
+import id.derysudrajat.alif.utils.TimeUtils.minutes
 import java.util.*
 import javax.inject.Inject
 
@@ -36,8 +38,10 @@ class PrayerAlarm : BroadcastReceiver() {
 
     companion object {
         const val EXTRA_ALARM = "extra_alarm"
+        const val EXTRA_ALARM_ACTIVITY = "extra_alarm"
 
         const val NOTIFICATION_TITLE = "Prayer Reminder"
+        const val NOTIFICATION_TITLE_ACTIVITY = "Task Reminder"
         private const val NOTIFICATION_ID = 101
         const val NOTIFICATION_REQUEST_CODE = 102
         const val CHANNEL_ID = "Reminder"
@@ -58,8 +62,18 @@ class PrayerAlarm : BroadcastReceiver() {
     lateinit var repository: PrayerRepository
 
     override fun onReceive(context: Context, intent: Intent) {
+        intent.extras?.getParcelable<ProgressTask>(EXTRA_ALARM_ACTIVITY)?.let {
+            showAlarmNotification(
+                context, NOTIFICATION_TITLE_ACTIVITY, "Now it's time to do ${it.title}"
+            )
+        }
         intent.extras?.getParcelable<PrayerReminder>(EXTRA_ALARM)?.let {
-            showAlarmNotification(context, it)
+            showAlarmNotification(context, NOTIFICATION_TITLE, buildString {
+                append("Now it's time for ")
+                append(getScheduleName(it.index))
+                append(" pray at ")
+                append(it.time)
+            })
             if (it.index != 0 || it.index != 2) {
                 val mediaPlayer = MediaPlayer.create(
                     context, if (it.index == 1) R.raw.adzan_fajr else R.raw.adzan_makkah
@@ -72,7 +86,11 @@ class PrayerAlarm : BroadcastReceiver() {
         }
     }
 
-    fun setPrayerAlarm(context: Context, prayerReminder: PrayerReminder, showToast: Boolean? = true) {
+    fun setPrayerAlarm(
+        context: Context,
+        prayerReminder: PrayerReminder,
+        showToast: Boolean? = true
+    ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, PrayerAlarm::class.java)
         intent.putExtra(EXTRA_ALARM, prayerReminder)
@@ -83,8 +101,10 @@ class PrayerAlarm : BroadcastReceiver() {
             set(Calendar.SECOND, 0)
         }
 
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, prayerReminder.index, intent, PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, prayerReminder.index,
+            intent, PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        )
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
@@ -98,26 +118,102 @@ class PrayerAlarm : BroadcastReceiver() {
         ).show()
     }
 
-    fun cancelAlarm(context: Context, prayerReminder: PrayerReminder) {
+    fun setActivityAlarm(context: Context, progressTask: ProgressTask, showToast: Boolean?) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, PrayerAlarm::class.java)
-        val requestCode = prayerReminder.index
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, requestCode, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        intent.putExtra(EXTRA_ALARM_ACTIVITY, progressTask)
+        val calendar = Calendar.getInstance()
+        val currentDate = Timestamp(Date(progressTask.date))
 
-        )
-        pendingIntent.cancel()
-        alarmManager.cancel(pendingIntent)
-        Toast.makeText(
-            context, "Reminder for ${getScheduleName(prayerReminder.index)} pray is unset",
+        val repeating = progressTask.repeating.split(" ")
+        if (repeating.size != 1) repeating.forEach {
+            if (it.isNotBlank()) {
+                // set multiple time and interval 7 and [id + interval]
+                var interval = it.toInt() - TimeUtils.indexOfDay
+                if (interval == -1) interval = 7
+
+                calendar.apply {
+                    set(Calendar.DAY_OF_MONTH, currentDate.day + interval)
+                    set(Calendar.HOUR_OF_DAY, currentDate.hour)
+                    set(Calendar.MINUTE, currentDate.minutes)
+                    set(Calendar.SECOND, 0)
+                }
+                val pendingIntent = PendingIntent.getBroadcast(
+                    context, (progressTask.id + interval).toInt(),
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+                )
+                alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY * 7,
+                    pendingIntent
+                )
+            }
+        } else {
+            calendar.apply {
+                set(Calendar.HOUR_OF_DAY, currentDate.hour)
+                set(Calendar.MINUTE, currentDate.minutes)
+                set(Calendar.SECOND, 0)
+            }
+            val pendingIntent = PendingIntent.getBroadcast(
+                context, progressTask.id.toInt(),
+                intent, PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+            )
+            when (repeating.first().toInt()) {
+                7 -> alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent
+                )
+                else -> alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            }
+        }
+        if (showToast == true) Toast.makeText(
+            context,
+            "Reminder for ${progressTask.title} at ${currentDate.hourMinutes} is set",
             Toast.LENGTH_SHORT
         ).show()
     }
 
+    fun cancelActivityAlarm(context: Context, progressTask: ProgressTask) {
+        val repeating = progressTask.repeating.split(" ")
+        if (repeating.size != 1) {
+            repeating.forEach {
+                if (it.isNotBlank()) {
+                    var interval = it.toInt() - TimeUtils.indexOfDay
+                    if (interval == -1) interval = 7
+                    cancelAlarm(context, (progressTask.id + interval).toInt())
+                }
+            }
+        } else cancelAlarm(context, progressTask.id.toInt())
+        Toast.makeText(context, "Reminder for ${progressTask.title} is unset", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    fun cancelAlarm(context: Context, id: Int, message: String? = "") {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, PrayerAlarm::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, id, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE
+        )
+        pendingIntent.cancel()
+        alarmManager.cancel(pendingIntent)
+        message?.let {
+            val text = it.ifBlank { "Reminder for ${getScheduleName(id)} pray is unset" }
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun showAlarmNotification(
         context: Context,
-        prayerReminder: PrayerReminder
+        title: String,
+        content: String
     ) {
 
         val notificationManagerCompat =
@@ -143,15 +239,8 @@ class PrayerAlarm : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_alif)
-            .setContentTitle(NOTIFICATION_TITLE)
-            .setContentText(
-                buildString {
-                    append("Now it's time for ")
-                    append(getScheduleName(prayerReminder.index))
-                    append(" pray at ")
-                    append(prayerReminder.time)
-                }
-            )
+            .setContentTitle(title)
+            .setContentText(content)
             .setColor(ContextCompat.getColor(context, R.color.primary))
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX)

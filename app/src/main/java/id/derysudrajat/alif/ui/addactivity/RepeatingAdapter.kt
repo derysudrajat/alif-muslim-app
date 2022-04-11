@@ -1,6 +1,5 @@
 package id.derysudrajat.alif.ui.addactivity
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import id.derysudrajat.alif.databinding.ItemRepeatingBinding
 
 class RepeatingAdapter(
     private val listOfRepeating: List<Int>,
-    private val onClick : (position: Int, isActive: Boolean) -> Unit
+    private val onClick: (position: Int, isActive: Boolean) -> Unit
 ) : RecyclerView.Adapter<RepeatingAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
