@@ -131,7 +131,8 @@
         android:layout_width="0dp"
         android:layout_marginTop="52dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/primary"
+        android:clickable="false"
+        app:cardBackgroundColor="@color/gray"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/rvRepeating">

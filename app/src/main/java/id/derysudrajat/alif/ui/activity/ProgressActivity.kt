@@ -44,7 +44,11 @@ class ProgressActivity : AppCompatActivity() {
     }
 
     private fun populateActivities(activities: List<ProgressTask>) {
-        if (activities.isNotEmpty()) populateHeader(activities)
+        populateHeader(activities)
+        binding.tvTextProgress.text = buildString {
+            if (activities.isEmpty()) append("No Activity yet, go add it")
+            else append("Progress: ")
+        }
 
         binding.rvActivity.apply {
             itemAnimator = DefaultItemAnimator()
@@ -59,13 +63,15 @@ class ProgressActivity : AppCompatActivity() {
         val progress = activities.filter { it.isCheck }.size.toDouble()
         val percentage = (progress / activities.size.toDouble()) * 100
         binding.tvProgress.text = buildString {
-            if (percentage % 2.0 == 0.0) append(percentage.toInt())
-            else append(DecimalFormat("##.##").format(percentage))
-            append("%")
+            if (activities.isNotEmpty()) {
+                if (percentage % 2.0 == 0.0) append(percentage.toInt())
+                else append(DecimalFormat("##.##").format(percentage))
+                append("%")
+            } else append("")
         }
         binding.linearProgressIndicator.apply {
-            setProgress(progress.toInt())
             max = activities.size
+            setProgress(progress.toInt())
         }
     }
 

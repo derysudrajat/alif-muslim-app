@@ -5,6 +5,8 @@ import android.text.format.DateFormat
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -12,6 +14,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
+import id.derysudrajat.alif.R
 import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.databinding.ActivityAddProgressBinding
 import id.derysudrajat.alif.utils.TimeUtils
@@ -49,19 +52,20 @@ class AddProgressActivity : AppCompatActivity() {
 
         with(binding) {
             appBar.apply {
-                tvTitle.text = "Add Activity"
+                tvTitle.text = buildString { append("Add Activity") }
                 btnBack.setOnClickListener { finish() }
             }
             btnRepeating.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.setRepeating(isChecked)
                 rvRepeating.visibility = if (isChecked) View.VISIBLE else View.GONE
             }
+            edtTitle.doAfterTextChanged { setUpButtonCreate(it.toString().isNotBlank()) }
             btnTime.setOnClickListener { showDatePicker() }
             btnCreateActivity.setOnClickListener {
                 viewModel.addTask(
                     this@AddProgressActivity,
                     ProgressTask(
-                        Random.nextLong(123, 1234567) * 7 * (TimeUtils.indexOfDay+1),
+                        Random.nextLong(123, 1234567) * 7 * (TimeUtils.indexOfDay + 1),
                         edtTitle.text.toString(),
                         selectedTime.time.time,
                         "",
@@ -72,6 +76,17 @@ class AddProgressActivity : AppCompatActivity() {
                     finish()
                 }
             }
+        }
+    }
+
+    private fun ActivityAddProgressBinding.setUpButtonCreate(isNotBlank: Boolean) {
+        this.btnCreateActivity.apply {
+            setCardBackgroundColor(
+                ContextCompat.getColorStateList(
+                    context, if (isNotBlank) R.color.primary else R.color.gray
+                )
+            )
+            isClickable = isNotBlank
         }
     }
 

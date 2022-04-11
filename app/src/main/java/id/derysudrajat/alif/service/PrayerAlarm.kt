@@ -8,9 +8,7 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -38,14 +36,13 @@ class PrayerAlarm : BroadcastReceiver() {
 
     companion object {
         const val EXTRA_ALARM = "extra_alarm"
-        const val EXTRA_ALARM_ACTIVITY = "extra_alarm"
+        const val EXTRA_ALARM_ACTIVITY = "extra_alarm_activity"
 
         const val NOTIFICATION_TITLE = "Prayer Reminder"
         const val NOTIFICATION_TITLE_ACTIVITY = "Task Reminder"
-        private const val NOTIFICATION_ID = 101
         const val NOTIFICATION_REQUEST_CODE = 102
         const val CHANNEL_ID = "Reminder"
-        const val CHANNEL_NAME = "Connect with other"
+        const val CHANNEL_NAME = "Daily Reminder"
         private fun getScheduleName(index: Int) = when (index) {
             0 -> "Imsak"
             1 -> "Farj"
@@ -63,24 +60,28 @@ class PrayerAlarm : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         intent.extras?.getParcelable<ProgressTask>(EXTRA_ALARM_ACTIVITY)?.let {
-            showAlarmNotification(
-                context, NOTIFICATION_TITLE_ACTIVITY, "Now it's time to do ${it.title}"
+            if (Timestamp(Date(it.date)).hour >= Timestamp.now().hour) showAlarmNotification(
+                context, it.id.toInt(), NOTIFICATION_TITLE_ACTIVITY,
+                "Now it's time to do ${it.title}"
             )
         }
         intent.extras?.getParcelable<PrayerReminder>(EXTRA_ALARM)?.let {
-            showAlarmNotification(context, NOTIFICATION_TITLE, buildString {
-                append("Now it's time for ")
-                append(getScheduleName(it.index))
-                append(" pray at ")
-                append(it.time)
-            })
-            if (it.index != 0 || it.index != 2) {
-                val mediaPlayer = MediaPlayer.create(
-                    context, if (it.index == 1) R.raw.adzan_fajr else R.raw.adzan_makkah
-                )
-                mediaPlayer.apply {
-                    isLooping = false
-                    start()
+            val reminderHour = it.time.split(":").first().toInt()
+            if (reminderHour >= Timestamp.now().hour) {
+                showAlarmNotification(context, it.index, NOTIFICATION_TITLE, buildString {
+                    append("Now it's time for ")
+                    append(getScheduleName(it.index))
+                    append(" pray at ")
+                    append(it.time)
+                })
+                if (it.index != 0 || it.index != 2) {
+                    val mediaPlayer = MediaPlayer.create(
+                        context, if (it.index == 1) R.raw.adzan_fajr else R.raw.adzan_makkah
+                    )
+                    mediaPlayer.apply {
+                        isLooping = false
+                        start()
+                    }
                 }
             }
         }
@@ -205,31 +206,25 @@ class PrayerAlarm : BroadcastReceiver() {
         pendingIntent.cancel()
         alarmManager.cancel(pendingIntent)
         message?.let {
-            val text = it.ifBlank { "Reminder for ${getScheduleName(id)} pray is unset" }
-            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+            if (it.isNotBlank()) {
+                val text = "Reminder for ${getScheduleName(id)} pray is unset"
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun showAlarmNotification(
         context: Context,
+        id: Int,
         title: String,
         content: String
     ) {
 
         val notificationManagerCompat =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val alarmSound = Uri.parse(
-            "android.resource://" + context.packageName + "/" + R.raw.adzan_fajr
-        )
-
-        val audioAttributes = AudioAttributes.Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .setUsage(AudioAttributes.USAGE_ALARM)
-            .build()
 
         val intent = Intent(context, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or
-                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
         val pendingIntent = PendingIntent.getActivity(
             context, NOTIFICATION_REQUEST_CODE, intent,
@@ -245,7 +240,7 @@ class PrayerAlarm : BroadcastReceiver() {
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
-            .setSound(alarmSound)
+            .setAutoCancel(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -256,7 +251,6 @@ class PrayerAlarm : BroadcastReceiver() {
             ).apply {
                 enableVibration(true)
                 vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-                setSound(alarmSound, audioAttributes)
             }
 
             builder.setChannelId(CHANNEL_ID)
@@ -264,6 +258,6 @@ class PrayerAlarm : BroadcastReceiver() {
         }
 
         val notification = builder.build()
-        notificationManagerCompat.notify(NOTIFICATION_ID, notification)
+        notificationManagerCompat.notify(id, notification)
     }
 }

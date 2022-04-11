@@ -23,10 +23,12 @@ class ActivityTaskAdapter(
             val percentage = (progress / data.size.toDouble()) * 100
 
             tvProgress.text = buildString {
-                append("Progress: ")
-                if (percentage % 2.0 == 0.0) append(percentage.toInt())
-                else append(DecimalFormat("##.##").format(percentage))
-                append("%")
+                if (data.isNotEmpty()) {
+                    append("Progress: ")
+                    if (percentage % 2.0 == 0.0) append(percentage.toInt())
+                    else append(DecimalFormat("##.##").format(percentage))
+                    append("%")
+                } else append("No Activity yet, go add it")
             }
 
             linearProgressIndicator.apply {
@@ -35,10 +37,12 @@ class ActivityTaskAdapter(
             }
 
             tvTaskRemains.text = buildString {
-                val remains = data.size - progress.toInt()
-                append(remains)
-                append(" Activity Remain")
-                if (remains>1) append("s")
+                if (data.isNotEmpty()) {
+                    val remains = data.size - progress.toInt()
+                    append(remains)
+                    append(" Activity Remain")
+                    if (remains > 1) append("s")
+                }
             }
 
             root.setOnClickListener { onClick() }
