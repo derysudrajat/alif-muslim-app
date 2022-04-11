@@ -7,6 +7,7 @@ import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.repo.PrayerRepository
+import id.derysudrajat.alif.repo.local.entity.CheckedTaskEntity
 import id.derysudrajat.alif.service.PrayerAlarm
 import id.derysudrajat.alif.utils.TimeUtils.formatDate
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,12 +23,20 @@ class ProgressActivityViewModel @Inject constructor(
     private val scope = viewModelScope
     val activities = MutableStateFlow<List<ProgressTask>>(listOf())
     private var currentActivity = listOf<ProgressTask>()
+    private var currentChecked = listOf<CheckedTaskEntity>()
 
-    fun getTodayActivity() = scope.launch {
-        repository.getProgressTask(Timestamp.now().formatDate).collect { progress ->
-            currentActivity = progress
-            activities.emit(listOf())
-            activities.emit(currentActivity)
+    fun getTodayActivity() {
+        scope.launch {
+            repository.getProgressTask(Timestamp.now().formatDate).collect { progress ->
+                currentActivity = progress
+                activities.emit(listOf())
+                activities.emit(currentActivity)
+            }
+        }
+        scope.launch {
+            repository.getCheckedTask(Timestamp.now().formatDate).collect {
+                currentChecked = it
+            }
         }
     }
 
@@ -35,8 +44,13 @@ class ProgressActivityViewModel @Inject constructor(
         currentActivity.find { it.id == id }?.let {
             val task = it
             task.isCheck = isChecked
-            scope.launch { repository.updateCheckedTask(task) }
-                .also { getTodayActivity() }
+            val isExist = currentChecked.find { c -> c.id == task.id } != null
+            if (isExist) scope.launch {
+                repository.updateCheckedTask(task) { getTodayActivity() }
+            } else scope.launch {
+                task.date = Timestamp.now().toDate().time
+                repository.addCheckedTask(task) { getTodayActivity() }
+            }
         }
     }
 

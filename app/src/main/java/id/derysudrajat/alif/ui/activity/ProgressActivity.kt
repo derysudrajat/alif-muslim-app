@@ -3,6 +3,7 @@ package id.derysudrajat.alif.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +45,7 @@ class ProgressActivity : AppCompatActivity() {
     }
 
     private fun populateActivities(activities: List<ProgressTask>) {
+        Log.d("TAG", "populateActivities: $activities")
         populateHeader(activities)
         binding.tvTextProgress.text = buildString {
             if (activities.isEmpty()) append("No Activity yet, go add it")

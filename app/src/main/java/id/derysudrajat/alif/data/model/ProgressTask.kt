@@ -12,7 +12,7 @@ import java.util.*
 data class ProgressTask(
     val id: Long,
     val title: String,
-    val date: Long,
+    var date: Long,
     var repeating: String,
     var isCheck: Boolean
 ) : Parcelable

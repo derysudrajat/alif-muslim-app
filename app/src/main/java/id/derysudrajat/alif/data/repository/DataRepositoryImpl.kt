@@ -18,5 +18,5 @@ interface DataRepositoryImpl {
     suspend fun addProgressTask(task: ProgressTask)
     suspend fun deleteProgressTask(task: ProgressTask)
 
-    suspend fun updateCheckedTask(task: ProgressTask)
+    suspend fun updateCheckedTask(task: ProgressTask, onFinish: () -> Unit)
 }

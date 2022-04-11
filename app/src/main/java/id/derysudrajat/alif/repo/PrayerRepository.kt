@@ -1,6 +1,5 @@
 package id.derysudrajat.alif.repo
 
-import android.util.Log
 import id.derysudrajat.alif.data.model.*
 import id.derysudrajat.alif.data.repository.DataRepositoryImpl
 import id.derysudrajat.alif.repo.local.LocalDataSource
@@ -35,16 +34,27 @@ class PrayerRepository @Inject constructor(
 
     override suspend fun getProgressTask(date: String): Flow<List<ProgressTask>> = flow {
         localDataSource.getCheckedTask(date).collect { checkedTask ->
-            localDataSource.getAllProgressTask().collect {entity ->
-                emit(entity.filter { it.filterDay() }.sortedBy { it.dateLong }.toProgressTask(checkedTask))
+            localDataSource.getAllProgressTask().collect { entity ->
+                emit(entity.filter { it.filterDay() }.sortedBy { it.dateLong }
+                    .toProgressTask(checkedTask))
             }
         }
+    }
+
+    suspend fun getCheckedTask(date: String) = flow {
+        localDataSource.getCheckedTask(date).collect { emit(it) }
+    }
+
+    suspend fun addCheckedTask(task: ProgressTask, onFinish: () -> Unit) {
+        localDataSource.addCheckedTask(task.toCheckedEntity())
+        onFinish()
     }
 
     private fun ProgressTaskEntity.filterDay(): Boolean {
         var isContain = false
         this.repeating.split(" ").forEach {
-            if (it.isNotBlank()) isContain = listOf(indexOfDay,7,-1).contains(it.toInt())
+            if (it.isNotBlank()) isContain = listOf(indexOfDay, 7, -1).contains(it.toInt())
+            if (isContain) return isContain
         }
         return isContain
     }
@@ -59,9 +69,9 @@ class PrayerRepository @Inject constructor(
         localDataSource.deleteCheckedTask(task.toCheckedEntity())
     }
 
-    override suspend fun updateCheckedTask(task: ProgressTask) {
-        Log.d("TAG", "updateCheckedTask: ${task.toCheckedEntity()}")
+    override suspend fun updateCheckedTask(task: ProgressTask, onFinish: () -> Unit) {
         localDataSource.updateCheckedTask(task.toCheckedEntity())
+        onFinish()
     }
 
 }

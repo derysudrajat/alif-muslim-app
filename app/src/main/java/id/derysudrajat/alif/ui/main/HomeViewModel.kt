@@ -116,7 +116,6 @@ class HomeViewModel @Inject constructor(
                 val seconds = progress / 1000
                 val minutes = seconds / 60
                 val hours = minutes / 60
-                println(seconds)
                 nextPray.value = "${hours}h ${minutes - (hours * 60)}m ${seconds - (minutes * 60)}s"
                 descNextPray.value = buildString {
                     append(" to ")

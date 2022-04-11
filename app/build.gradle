@@ -14,8 +14,8 @@ android {
         applicationId "id.derysudrajat.alif"
         minSdk 21
         targetSdk 32
-        versionCode 21010001
-        versionName "1.0.1"
+        versionCode 21010002
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
