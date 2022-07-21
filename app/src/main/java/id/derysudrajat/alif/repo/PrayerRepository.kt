@@ -14,8 +14,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PrayerRepository @Inject constructor(
-    private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val remoteDataSource: RemoteDataSource, private val localDataSource: LocalDataSource
 ) : DataRepositoryImpl {
     override suspend fun getSchedule(
         lat: Double, long: Double, month: Int, year: Int
@@ -73,5 +72,8 @@ class PrayerRepository @Inject constructor(
         localDataSource.updateCheckedTask(task.toCheckedEntity())
         onFinish()
     }
+
+    override suspend fun getAyahQuran(noSurah: Int): Flow<States<List<Ayah>>> =
+        remoteDataSource.getAyahQuran(noSurah)
 
 }

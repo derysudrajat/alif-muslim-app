@@ -44,7 +44,7 @@ class CalendarActivity : AppCompatActivity() {
             currentLong = it.longitude
             homeViewModel.getPrayerSchedule(it.latitude, it.longitude, Timestamp.now())
         }
-        scope.launch { homeViewModel.currentSchedule.collect(::populateCurrentSchedule) }
+        scope.launch { homeViewModel.currentScheduleC.collect(::populateCurrentSchedule) }
 
         binding.calendarView.setOnDateChangeListener { _, year, month, day ->
             homeViewModel.getPrayerSchedule(

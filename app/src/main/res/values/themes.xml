@@ -53,6 +53,10 @@
         <item name="materialTimePickerTheme">@style/AlifTimePicker</item>
     </style>
 
+    <style name="Theme.Alif.Compass" parent="Theme.Alif.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="l">#338D77</item>
+    </style>
+
     <style name="AlifTimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>

@@ -4,7 +4,6 @@ import com.google.firebase.Timestamp
 import id.derysudrajat.alif.data.model.Prayer
 import id.derysudrajat.alif.data.model.TimingSchedule
 import id.derysudrajat.alif.data.model.toList
-import id.derysudrajat.alif.utils.TimeUtils.hourMinutes
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
@@ -40,19 +39,20 @@ class ExampleUnitTest {
         val hour = 19
         val min = 55
         timingSchedule.toList().let { listSchedule ->
-            listSchedule
-                .filter {
-                    it.time.split(":", " ").first().toInt() >= hour
-                }.firstOrNull {
-                    if (it.time.split(":", " ").first().toInt() == hour) it.time.split(":", " ")[1].toInt() >= min
-                    else it.time.split(":", " ").first().toInt() >= hour
-                }.let {
-                    if (it != null) println(it)
-                    else listSchedule.minByOrNull { sc -> sc.time.split(":", " ").first().toInt() }
-                        ?.let { min ->
-                            println(min)
-                        }
-                }
+            listSchedule.filter {
+                it.time.split(":", " ").first().toInt() >= hour
+            }.firstOrNull {
+                if (it.time.split(":", " ").first().toInt() == hour) it.time.split(
+                    ":", " "
+                )[1].toInt() >= min
+                else it.time.split(":", " ").first().toInt() >= hour
+            }.let {
+                if (it != null) println(it)
+                else listSchedule.minByOrNull { sc -> sc.time.split(":", " ").first().toInt() }
+                    ?.let { min ->
+                        println(min)
+                    }
+            }
         }
     }
 
@@ -68,6 +68,25 @@ class ExampleUnitTest {
         val timeUntil = Calendar.getInstance().apply { time = Date(interval) }
         println(timeUntil)
         println("${timeUntil.get(Calendar.HOUR_OF_DAY)}:${timeUntil.get(Calendar.MINUTE)}")
+    }
+
+    @Test
+    fun testJuz() {
+        var resultDegree = 339
+        var finalDegree = 360 - resultDegree
+        println(finalDegree)
+
+        resultDegree = 0
+        finalDegree = 360 - resultDegree
+        println(finalDegree)
+    }
+
+    @Test
+    fun testBismillah() {
+        val ayah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ"
+        val bismillah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ "
+        println(ayah.contains(bismillah))
+        println(ayah.split(bismillah).last())
     }
 
 }
