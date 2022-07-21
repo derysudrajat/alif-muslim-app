@@ -35,7 +35,7 @@ class ProgressActivity : AppCompatActivity() {
         viewModel.getTodayActivity()
         setupAppBar()
         onSwipeDelete()
-        scope.launch { viewModel.activities.collect(this@ProgressActivity::populateActivities) }
+        scope.launch { viewModel.activitiesC.collect(this@ProgressActivity::populateActivities) }
 
         binding.nestedScrollView.setOnScrollChangeListener(scrollListener)
         binding.btnAddActivity.setOnClickListener {

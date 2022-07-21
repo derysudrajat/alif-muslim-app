@@ -3,33 +3,59 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/CompassPage.kt" value="0.31181434599156116" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ComposeActivity.kt" value="0.30833333333333335" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/HomePage.kt" value="0.31181434599156116" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/QuranPage.kt" value="0.5" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/SurahPage.kt" value="0.3675925925925926" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/BaseTopBar.kt" value="0.3675925925925926" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemAudio.kt" value="0.3675925925925926" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemAyah.kt" value="0.45" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemCalendar.kt" value="0.45" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemJuz.kt" value="0.3675925925925926" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemMainDate.kt" value="0.3351851851851852" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemProgressActivity.kt" value="0.3351851851851852" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemSchedule.kt" value="0.375" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemSurah.kt" value="0.375" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/components/ItemTimingSchedule.kt" value="0.45" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/foundation/text/PreviewAllText.kt" value="0.30833333333333335" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/foundation/text/TextHeading.kt" value="0.7350993377483444" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/foundation/text/TextHeadingLarge.kt" value="0.7835294117647059" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/foundation/text/TextHeadingXLarge.kt" value="0.5711835334476844" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/foundation/text/TextTile.kt" value="0.43529411764705883" />
+        <entry key="app/src/main/java/id/derysudrajat/alif/compose/ui/foundation/text/TextTitle.kt" value="0.9148351648351648" />
         <entry key="app/src/main/res/drawable/ic_activity.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/ic_arrow.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/ic_bg_schedule.xml" value="0.209" />
+        <entry key="app/src/main/res/drawable/ic_bg_surah.xml" value="0.2005" />
         <entry key="app/src/main/res/drawable/ic_calendar.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/ic_check_outline.xml" value="0.209" />
+        <entry key="app/src/main/res/drawable/ic_compass_direction.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_delete.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/ic_location.xml" value="0.2195" />
+        <entry key="app/src/main/res/drawable/ic_quran.xml" value="0.2415" />
         <entry key="app/src/main/res/drawable/ic_sound_off.xml" value="0.2735" />
         <entry key="app/src/main/res/drawable/ic_sound_on.xml" value="0.2195" />
+        <entry key="app/src/main/res/drawable/ic_wind_direction.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/item_event.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/sl_thumb_switch.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/sl_track_switch.xml" value="0.209" />
         <entry key="app/src/main/res/layout/activity_add_progress.xml" value="0.3933074951171875" />
         <entry key="app/src/main/res/layout/activity_calendar.xml" value="0.3729166666666667" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.34990692138671875" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5343157599954044" />
         <entry key="app/src/main/res/layout/activity_progress.xml" value="0.2689208984375" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3729166666666667" />
         <entry key="app/src/main/res/layout/item_activity.xml" value="0.46962710037811317" />
         <entry key="app/src/main/res/layout/item_calendar.xml" value="0.3729166666666667" />
         <entry key="app/src/main/res/layout/item_event.xml" value="0.311956787109375" />
-        <entry key="app/src/main/res/layout/item_progress_activity.xml" value="0.3741421470159217" />
+        <entry key="app/src/main/res/layout/item_progress_activity.xml" value="0.4904580152671756" />
         <entry key="app/src/main/res/layout/item_repeating.xml" value="0.38702522468847805" />
-        <entry key="app/src/main/res/layout/item_schedule.xml" value="0.5812143961588543" />
+        <entry key="app/src/main/res/layout/item_schedule.xml" value="0.4768976897689769" />
         <entry key="app/src/main/res/layout/item_skeleton_schedule.xml" value="0.508171974038178" />
         <entry key="app/src/main/res/layout/layout_action_bar.xml" value="0.41620635986328125" />
+        <entry key="app/src/main/res/layout/sample_compass.xml" value="0.3052586575459598" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19" />
       </map>

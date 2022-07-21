@@ -16,7 +16,7 @@ import id.derysudrajat.alif.databinding.ItemScheduleBinding
 class ScheduleAdapter(
     private val listPrayer: List<Prayer>,
     private val timingSchedule: TimingSchedule,
-    private val onSetReminder : ( timingSchedule: TimingSchedule,prayerTime: String, isReminded: Boolean, position: Int) -> Unit
+    private val onSetReminder: (timingSchedule: TimingSchedule, prayerTime: String, isReminded: Boolean, position: Int) -> Unit
 ): RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view)

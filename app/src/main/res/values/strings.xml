@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Alif</string>
+    <string name="title_activity_base_component">BaseComponent</string>
+    <string name="title_activity_quran">QuranActivity</string>
 </resources>

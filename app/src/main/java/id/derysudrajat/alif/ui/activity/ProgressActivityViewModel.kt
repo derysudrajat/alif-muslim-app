@@ -1,6 +1,9 @@
 package id.derysudrajat.alif.ui.activity
 
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
@@ -21,7 +24,8 @@ class ProgressActivityViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val scope = viewModelScope
-    val activities = MutableStateFlow<List<ProgressTask>>(listOf())
+    var activities by mutableStateOf(emptyList<ProgressTask>())
+    val activitiesC = MutableStateFlow<List<ProgressTask>>(listOf())
     private var currentActivity = listOf<ProgressTask>()
     private var currentChecked = listOf<CheckedTaskEntity>()
 
@@ -29,8 +33,10 @@ class ProgressActivityViewModel @Inject constructor(
         scope.launch {
             repository.getProgressTask(Timestamp.now().formatDate).collect { progress ->
                 currentActivity = progress
-                activities.emit(listOf())
-                activities.emit(currentActivity)
+                activitiesC.emit(listOf())
+                activitiesC.emit(currentActivity)
+                activities = listOf()
+                activities = currentActivity
             }
         }
         scope.launch {

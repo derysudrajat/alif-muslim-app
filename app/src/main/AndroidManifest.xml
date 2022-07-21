@@ -7,9 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:name=".di.AlifApp"
@@ -18,7 +18,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Alif">
+        android:theme="@style/Theme.Alif"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.quran.SurahActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Alif" />
+        <activity
+            android:name=".ui.compass.CompassActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Alif.Compass" />
+        <activity
+            android:name=".ui.quran.QuranActivity"
+            android:exported="false"
+            android:label="@string/title_activity_quran"
+            android:theme="@style/Theme.Alif" />
+        <activity
+            android:name=".compose.ComposeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_base_component"
+            android:theme="@style/Theme.Alif" />
         <activity
             android:name=".ui.addactivity.AddProgressActivity"
             android:exported="false" />

@@ -1,8 +1,13 @@
 package id.derysudrajat.alif.ui.main
 
 import android.content.Context
+import android.location.Geocoder
+import android.location.Location
 import android.os.CountDownTimer
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
@@ -26,15 +31,19 @@ class HomeViewModel @Inject constructor(
     private val prayerAlarm: PrayerAlarm
 ) : ViewModel() {
 
-    var currentSchedule = MutableStateFlow(Schedule.EMPTY)
+    var currentScheduleC = MutableStateFlow(Schedule.EMPTY)
+    var currentSchedule by mutableStateOf(Schedule.EMPTY)
 
-    var timingSchedule = MutableStateFlow(TimingSchedule.EMPTY)
+    var timingScheduleC = MutableStateFlow(TimingSchedule.EMPTY)
+    var timingSchedule by mutableStateOf(TimingSchedule.EMPTY)
     private var currentTimingSchedule = TimingSchedule.EMPTY
-    var isLoading = MutableStateFlow(true)
+    var isLoading by mutableStateOf(true)
 
-    var nextPray = MutableStateFlow("-")
-    var descNextPray = MutableStateFlow("-")
+    var nextPray by mutableStateOf("-")
+    var descNextPray by mutableStateOf("-")
     private lateinit var countDownTimer: CountDownTimer
+
+    var locationAddress by mutableStateOf("-")
 
 
     fun getPrayerSchedule(lat: Double, long: Double, date: Timestamp) = viewModelScope.launch {
@@ -42,20 +51,26 @@ class HomeViewModel @Inject constructor(
             when (it) {
                 is States.Loading -> {
                     Log.d("TAG", "getPrayerSchedule: loading")
-                    isLoading.value = true
+                    isLoading = true
                 }
                 is States.Success -> {
-                    isLoading.value = false
+                    isLoading = false
                     it.data.find { sc ->
                         sc.georgianDate.day == if (date.hour > 20) date.day + 1 else date.day
                     }?.let { schedule ->
-                        viewModelScope.launch { currentSchedule.emit(schedule) }
+                        viewModelScope.launch {
+                            currentScheduleC.emit(schedule)
+                            currentSchedule = schedule
+                        }
                         getReminderPrayer(schedule.timingSchedule)
-                        viewModelScope.launch { timingSchedule.emit(currentTimingSchedule) }
+                        viewModelScope.launch {
+                            timingSchedule = currentTimingSchedule
+                            timingScheduleC.emit(currentTimingSchedule)
+                        }
                     }
                 }
                 is States.Failed -> {
-                    isLoading.value = false
+                    isLoading = false
                     Log.d("TAG", "getPrayerSchedule: failed = ${it.message}")
                 }
             }
@@ -79,8 +94,8 @@ class HomeViewModel @Inject constructor(
                 listSchedule[reminder.index].isReminded = reminder.isReminded
             }
             currentTimingSchedule = listSchedule.toTimingSchedule()
-            viewModelScope.launch { this@HomeViewModel.timingSchedule.emit(TimingSchedule.EMPTY) }
-            viewModelScope.launch { this@HomeViewModel.timingSchedule.emit(currentTimingSchedule) }
+            viewModelScope.launch { this@HomeViewModel.timingSchedule = TimingSchedule.EMPTY }
+            viewModelScope.launch { this@HomeViewModel.timingSchedule = currentTimingSchedule }
         }
     }
 
@@ -105,7 +120,10 @@ class HomeViewModel @Inject constructor(
         val now = Timestamp.now()
         val diff: Long = Date(
             Calendar.getInstance().apply {
-                set(Calendar.DAY_OF_MONTH, if (now.hour > 20) now.day + 1 else now.day)
+                set(
+                    Calendar.DAY_OF_MONTH,
+                    if (now.hour > timingSchedule.isha.time.hour) now.day + 1 else now.day
+                )
                 set(Calendar.HOUR_OF_DAY, prayer.time.hour)
                 set(Calendar.MINUTE, prayer.time.minutes)
             }.time.time
@@ -116,8 +134,8 @@ class HomeViewModel @Inject constructor(
                 val seconds = progress / 1000
                 val minutes = seconds / 60
                 val hours = minutes / 60
-                nextPray.value = "${hours}h ${minutes - (hours * 60)}m ${seconds - (minutes * 60)}s"
-                descNextPray.value = buildString {
+                nextPray = "${hours}h ${minutes - (hours * 60)}m ${seconds - (minutes * 60)}s"
+                descNextPray = buildString {
                     append(" to ")
                     append(timingSchedule.getScheduleName(prayer))
                 }
@@ -125,13 +143,27 @@ class HomeViewModel @Inject constructor(
 
             override fun onFinish() {
                 if (this@HomeViewModel::countDownTimer.isInitialized) countDownTimer.cancel()
-                nextPray.value = "Now"
-                descNextPray.value = buildString {
+                nextPray = "Now"
+                descNextPray = buildString {
                     append(" it's time to pray ")
                     append(timingSchedule.getScheduleName(prayer))
                 }
             }
         }.start()
+    }
+
+    fun getLocationAddress(context: Context, location: Location) {
+        viewModelScope.launch {
+            Geocoder(context, Locale.getDefault()).apply {
+                getFromLocation(location.latitude, location.longitude, 1).first()
+                    .let { address ->
+                        locationAddress = buildString {
+                            append(address.locality).append(", ")
+                            append(address.subAdminArea)
+                        }
+                    }
+            }
+        }
     }
 
 }
