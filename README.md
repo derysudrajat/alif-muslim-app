@@ -4,7 +4,7 @@
 
 Alif is a Muslim app to schedule your daily need like prayer reminders, Islamic calendar, and create your custom activity to track your activity
 
-<img src="https://user-images.githubusercontent.com/32610660/180285507-ac65beab-7b5d-400c-93ac-24de75aa7661.png"/>
+<img src="https://user-images.githubusercontent.com/32610660/181203002-e0a22bb7-f171-4244-bd70-a7f2eef5bd08.png"/>
 
 
 ## Screenshot
@@ -25,4 +25,4 @@ Alif is a Muslim app to schedule your daily need like prayer reminders, Islamic 
 </table>
 
 ## Download
-<a href="https://appdistribution.firebase.dev/i/63888a80223193c3"><img src="https://www.gstatic.com/alkali/eba17e954431c80b7b31125928f3379476ee4934.png" title="Alif App" width="64" height="64" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://github.com/derysudrajat/alif-muslim-app/tags"><img src="https://user-images.githubusercontent.com/32610660/162803122-3817839a-f58a-49b4-883d-5feb4ee7316f.png" title="Alif App" width="64" height="64" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://drive.google.com/drive/folders/1IB8G6K1rUMQzoG4azotPujIlvsj3wqc5?usp=sharing"><img src="https://user-images.githubusercontent.com/32610660/162807457-84acad9d-cd36-4911-98c5-1c1cb03cb873.png" title="Alif App" height="60" /></a>
+<a href="https://appdistribution.firebase.dev/i/63888a80223193c3"><img src="https://www.gstatic.com/alkali/eba17e954431c80b7b31125928f3379476ee4934.png" title="Alif App" width="64" height="64" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://github.com/derysudrajat/alif-muslim-app/tags"><img src="https://user-images.githubusercontent.com/32610660/162803122-3817839a-f58a-49b4-883d-5feb4ee7316f.png" title="Alif App" width="64" height="64" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://drive.google.com/drive/folders/1IB8G6K1rUMQzoG4azotPujIlvsj3wqc5?usp=sharing"><img src="https://user-images.githubusercontent.com/32610660/162807457-84acad9d-cd36-4911-98c5-1c1cb03cb873.png" title="Alif App" height="60" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="https://play.google.com/store/apps/details?id=id.derysudrajat.alif"><img src="https://user-images.githubusercontent.com/32610660/181200717-92269475-6cea-438f-bc6a-c3e5a8e78681.png" title="Alif App" height="60" /></a>
