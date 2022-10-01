@@ -29,4 +29,3 @@ you also can do the same thing in pull request but more flexibility just add iss
 ```
 
 Thats all, happy contributing and Thanks ✨
-```
