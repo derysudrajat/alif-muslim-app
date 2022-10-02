@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -14,12 +15,17 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
+import id.derysudrajat.alif.R
 import id.derysudrajat.alif.data.model.ProgressTask
 import id.derysudrajat.alif.databinding.ActivityProgressBinding
+import id.derysudrajat.alif.databinding.ItemActivityBinding
 import id.derysudrajat.alif.ui.addactivity.AddProgressActivity
 import id.derysudrajat.alif.utils.TimeUtils.fullDate
+import id.derysudrajat.alif.utils.TimeUtils.hourMinutes
+import id.derysudrajat.easyadapter.EasyAdapter
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
+import java.util.*
 
 @AndroidEntryPoint
 class ProgressActivity : AppCompatActivity() {
@@ -54,8 +60,20 @@ class ProgressActivity : AppCompatActivity() {
 
         binding.rvActivity.apply {
             itemAnimator = DefaultItemAnimator()
-            adapter = ActivityAdapter(activities) { id, isChecked ->
-                viewModel.checkedTask(id, isChecked)
+            adapter = EasyAdapter(activities, ItemActivityBinding::inflate) { binding, data ->
+                with(binding) {
+                    tvActivityLabel.text = data.title
+                    tvAlarm.text = Timestamp(Date(data.date)).hourMinutes
+                    ivCheck.apply {
+                        setImageResource(if (data.isCheck) R.drawable.ic_check_fill else R.drawable.ic_check_outline)
+                        imageTintList = ContextCompat.getColorStateList(
+                            this.context,
+                            if (data.isCheck) R.color.primary else R.color.black_60
+                        )
+                    }
+                    ivCheck.setOnClickListener { viewModel.checkedTask(data.id, data.isCheck) }
+                    btnCheck.setOnClickListener { viewModel.checkedTask(data.id, data.isCheck) }
+                }
             }
         }
     }
@@ -89,6 +107,7 @@ class ProgressActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         setResult(RESULT_OK)

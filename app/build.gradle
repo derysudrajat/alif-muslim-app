@@ -110,7 +110,7 @@ dependencies {
     implementation "com.airbnb.android:lottie-compose:5.2.0"
 
     // easy adapter
-    implementation 'com.github.derysudrajat:EasyAdapter:1.0.0'
+    implementation 'com.github.derysudrajat:EasyAdapter:2.0.0'
     // recycle view
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
