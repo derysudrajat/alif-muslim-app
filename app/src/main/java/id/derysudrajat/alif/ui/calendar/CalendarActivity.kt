@@ -13,12 +13,15 @@ import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import id.derysudrajat.alif.data.model.Schedule
 import id.derysudrajat.alif.databinding.ActivityCalendarBinding
+import id.derysudrajat.alif.databinding.ItemEventBinding
 import id.derysudrajat.alif.ui.main.HomeViewModel
 import id.derysudrajat.alif.utils.LocationUtils
 import id.derysudrajat.alif.utils.LocationUtils.checkLocationPermission
 import id.derysudrajat.alif.utils.TimeUtils.getCalendar
+import id.derysudrajat.alif.utils.TimeUtils.montYear
 import id.derysudrajat.alif.utils.TimeUtils.stringFormat
 import id.derysudrajat.alif.utils.TimeUtils.timeStamp
+import id.derysudrajat.easyadapter.EasyAdapter
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -58,10 +61,30 @@ class CalendarActivity : AppCompatActivity() {
         btnBack.setOnClickListener { finish() }
     }
 
-    private fun populateCurrentSchedule(it: Schedule) {
+    private fun populateCurrentSchedule(schedule: Schedule) {
         binding.rvEvent.apply {
             itemAnimator = DefaultItemAnimator()
-            adapter = EventAdapter(it)
+            adapter = EasyAdapter(
+                if (schedule.hijriDate.holidays.isEmpty()) mutableListOf("No Event")
+                else schedule.hijriDate.holidays.toMutableList(), ItemEventBinding::inflate
+            ) { binding, data ->
+                with(binding) {
+                    tvDateDay.text = schedule.georgianDate.day.toString()
+                    tvDateIslamic.text = buildString {
+                        schedule.hijriDate.let {
+                            append("${it.day} ${it.monthDesignation} ${it.year} ${it.yearDesignation}")
+                        }
+                    }
+                    tvHoliday.text = data
+                    schedule.georgianDate.let {
+                        tvDate.text = getCalendar(
+                            it.year,
+                            it.month - 1,
+                            it.day
+                        ).time.stringFormat.timeStamp.montYear
+                    }
+                }
+            }
         }
     }
 
