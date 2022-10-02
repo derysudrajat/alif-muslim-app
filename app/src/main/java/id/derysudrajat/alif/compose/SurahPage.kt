@@ -37,11 +37,11 @@ fun SurahPage(
     onStart: () -> Unit,
     onPause: () -> Unit
 ) {
-    Scaffold(topBar = {
+    Scaffold(modifier = Modifier.padding(16.dp), topBar = {
         BaseTopBar(title = surah.name, onBack)
-    }) {
+    }) { paddingValues ->
         LazyColumn(
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = paddingValues
         ) {
             item { ItemHeaderSurah(surah) }
             item { ItemAudio(audioProgress, isFinish, onStart, onPause) }

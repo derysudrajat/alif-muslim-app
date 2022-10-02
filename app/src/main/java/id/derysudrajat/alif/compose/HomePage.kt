@@ -1,10 +1,11 @@
 package id.derysudrajat.alif.compose
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import id.derysudrajat.alif.compose.ui.components.*
@@ -26,8 +27,8 @@ fun HomePage(
     goToDetailCalendar: () -> Unit,
     goToProgressActivity: () -> Unit,
 ) {
-    Scaffold {
-        LazyColumn(contentPadding = PaddingValues(16.dp)) {
+    Scaffold(Modifier.padding(16.dp)) {
+        LazyColumn(contentPadding = it) {
             item { ItemMainDate(calendar) }
             item {
                 ItemTimingSchedule(

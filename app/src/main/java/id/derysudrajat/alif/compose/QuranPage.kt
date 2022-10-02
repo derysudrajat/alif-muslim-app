@@ -44,7 +44,9 @@ fun QuranPage(
         BaseTopBar(title = "Al-Qur'an", onBack)
     }) {
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
         ) {
             val (tabLayout, content) = createRefs()
             var tabIndex by remember { mutableStateOf(0) }

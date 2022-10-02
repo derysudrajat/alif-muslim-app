@@ -29,8 +29,8 @@ class CompassViewModel : ViewModel() {
     fun getLocationAddress(context: Context, location: Location) {
         viewModelScope.launch {
             Geocoder(context, Locale.getDefault()).apply {
-                getFromLocation(location.latitude, location.longitude, 1).first()
-                    .let { address ->
+                getFromLocation(location.latitude, location.longitude, 1)?.first()
+                    ?.let { address ->
                         locationAddress = buildString {
                             append(address.locality).append(", ")
                             append(address.subAdminArea)
