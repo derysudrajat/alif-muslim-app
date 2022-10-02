@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import id.derysudrajat.alif.compose.ui.components.BaseTopBar
 import id.derysudrajat.alif.compose.ui.foundation.text.TextBody
 import id.derysudrajat.alif.compose.ui.foundation.text.TextTitle
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
@@ -32,13 +31,6 @@ class ComposeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AlifTheme {
-                Scaffold(
-                    topBar = {
-                        BaseTopBar("Title")
-                    }
-                ) {
-
-                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -52,9 +44,9 @@ class ComposeActivity : ComponentActivity() {
 
 @Composable
 fun SampleNested() {
-    Scaffold {
+    Scaffold(Modifier.padding(16.dp)) { padding ->
         LazyColumn(
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = padding
         ) {
             item { TextTitle(text = "Horizontal List") }
             item {

@@ -33,11 +33,14 @@ fun CompassPage(
     refreshLocation: () -> Unit
 ) {
     Scaffold {
-        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        ConstraintLayout(modifier = Modifier
+            .padding(it)
+            .fillMaxSize()) {
             val (bg, back, refresh, title, degree, description, location, windDir, compass) = createRefs()
             val realDegree = 360 - qilbaRotation.to
 
-            Image(painterResource(id = R.drawable.ic_bg_schedule),
+            Image(
+                painterResource(id = R.drawable.ic_bg_schedule),
                 contentDescription = "",
                 contentScale = ContentScale.FillHeight,
                 modifier = Modifier.constrainAs(bg) {
