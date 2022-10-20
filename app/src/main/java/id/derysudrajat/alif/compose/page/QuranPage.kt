@@ -27,6 +27,8 @@ import id.derysudrajat.alif.compose.ui.components.ItemSurah
 import id.derysudrajat.alif.compose.ui.foundation.text.TextHeading
 import id.derysudrajat.alif.compose.ui.foundation.text.TextTitle
 import id.derysudrajat.alif.compose.ui.navigation.QuranBottomNav
+import id.derysudrajat.alif.compose.ui.navigation.QuranNavDrawer
+import id.derysudrajat.alif.compose.ui.navigation.QuranNavigationRail
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
 import id.derysudrajat.alif.data.model.Juz
 import id.derysudrajat.alif.data.model.Surah
@@ -54,14 +56,22 @@ fun QuranPage(
 fun QuranContent(
     modifier: Modifier,
     quranUiState: QuranUiState,
+    // TODO 5: add QuranNavType variable
     onClick: (Surah) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
     ) {
-        val (tabLayout, content, navRail) = createRefs()
+        // TODO 6: create ref for navRail, navDraw
+        val (tabLayout, content) = createRefs()
         var tabIndex by remember { mutableStateOf(0) }
 
+        // TODO 7: add when expression to handle every navType
+        /** TODO 8 :
+         *  when navType BottomNav set Navigation to [QuranBottomNav]
+         *  when navType NavRail set Navigation to [QuranNavigationRail]
+         *  when navType NavDrawer set Navigation to [QuranNavDrawer] with content [ContainerPage]
+         */
         QuranBottomNav(modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .constrainAs(tabLayout) {
@@ -71,6 +81,9 @@ fun QuranContent(
                 width = Dimension.fillToConstraints
             }, tabIndex = tabIndex, onClick = { tabIndex = it })
 
+        // TODO 9: handle if not navType NavDrawer don't show container page
+        // TODO 10: set [contentModifier] start.linkTo to navRail.end when navType is NavRail
+        // TODO 11: set [contentModifier] bottom.linkTo to parent.bottom when navType is not BottomNav
         val contentModifier = Modifier.constrainAs(content) {
             top.linkTo(parent.top)
             start.linkTo(parent.start)
@@ -172,6 +185,7 @@ private fun PreviewQuranContent() {
         QuranContent(
             modifier = Modifier.fillMaxSize(),
             quranUiState = QuranUiState(),
+            // TODO 12: set preview navType to NavRail
             onClick = {})
     }
 }
