@@ -28,6 +28,7 @@ import id.derysudrajat.alif.compose.ui.foundation.text.TextHeading
 import id.derysudrajat.alif.compose.ui.foundation.text.TextTitle
 import id.derysudrajat.alif.compose.ui.navigation.QuranBottomNav
 import id.derysudrajat.alif.compose.ui.navigation.QuranNavDrawer
+import id.derysudrajat.alif.compose.ui.navigation.QuranNavType
 import id.derysudrajat.alif.compose.ui.navigation.QuranNavigationRail
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
 import id.derysudrajat.alif.data.model.Juz
@@ -56,43 +57,57 @@ fun QuranPage(
 fun QuranContent(
     modifier: Modifier,
     quranUiState: QuranUiState,
-    // TODO 5: add QuranNavType variable
+    navType: QuranNavType,
     onClick: (Surah) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
     ) {
-        // TODO 6: create ref for navRail, navDraw
-        val (tabLayout, content) = createRefs()
+        val (tabLayout, content, navRail, navDraw) = createRefs()
         var tabIndex by remember { mutableStateOf(0) }
 
-        // TODO 7: add when expression to handle every navType
-        /** TODO 8 :
-         *  when navType BottomNav set Navigation to [QuranBottomNav]
-         *  when navType NavRail set Navigation to [QuranNavigationRail]
-         *  when navType NavDrawer set Navigation to [QuranNavDrawer] with content [ContainerPage]
-         */
-        QuranBottomNav(modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .constrainAs(tabLayout) {
-                bottom.linkTo(parent.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-                width = Dimension.fillToConstraints
-            }, tabIndex = tabIndex, onClick = { tabIndex = it })
+        when (navType) {
+            QuranNavType.BottomNav -> {
+                QuranBottomNav(modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .constrainAs(tabLayout) {
+                        bottom.linkTo(parent.bottom, margin = 16.dp)
+                        end.linkTo(parent.end, margin = 16.dp)
+                        start.linkTo(parent.start, margin = 16.dp)
+                        width = Dimension.fillToConstraints
+                    }, tabIndex = tabIndex, onClick = { tabIndex = it })
+            }
 
-        // TODO 9: handle if not navType NavDrawer don't show container page
-        // TODO 10: set [contentModifier] start.linkTo to navRail.end when navType is NavRail
-        // TODO 11: set [contentModifier] bottom.linkTo to parent.bottom when navType is not BottomNav
-        val contentModifier = Modifier.constrainAs(content) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(tabLayout.top)
-            width = Dimension.fillToConstraints
-            height = Dimension.fillToConstraints
+            QuranNavType.NavRail -> {
+                QuranNavigationRail(
+                    Modifier.constrainAs(navRail) { start.linkTo(parent.start) }, tabIndex
+                ) { tabIndex = it }
+            }
+
+            QuranNavType.NavDrawer -> {
+                QuranNavDrawer(
+                    Modifier.constrainAs(navDraw) { start.linkTo(parent.start) },
+                    tabIndex, { tabIndex = it }) {
+                    ContainerPage(Modifier.fillMaxSize(), tabIndex, quranUiState, onClick)
+                }
+            }
         }
-        ContainerPage(contentModifier, tabIndex, quranUiState, onClick)
+
+        if (navType != QuranNavType.NavDrawer) {
+            val contentModifier = Modifier.constrainAs(content) {
+                top.linkTo(parent.top)
+                start.linkTo(
+                    if (navType == QuranNavType.NavRail) navRail.end else parent.start
+                )
+                end.linkTo(parent.end)
+                bottom.linkTo(
+                    if (navType == QuranNavType.BottomNav) tabLayout.top else parent.bottom
+                )
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            ContainerPage(contentModifier, tabIndex, quranUiState, onClick)
+        }
     }
 }
 
@@ -185,7 +200,7 @@ private fun PreviewQuranContent() {
         QuranContent(
             modifier = Modifier.fillMaxSize(),
             quranUiState = QuranUiState(),
-            // TODO 12: set preview navType to NavRail
+            navType = QuranNavType.NavRail,
             onClick = {})
     }
 }
