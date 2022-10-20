@@ -1,4 +1,4 @@
-package id.derysudrajat.alif.compose
+package id.derysudrajat.alif.compose.page
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

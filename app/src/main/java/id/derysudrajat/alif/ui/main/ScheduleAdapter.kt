@@ -17,9 +17,9 @@ class ScheduleAdapter(
     private val listPrayer: List<Prayer>,
     private val timingSchedule: TimingSchedule,
     private val onSetReminder: (timingSchedule: TimingSchedule, prayerTime: String, isReminded: Boolean, position: Int) -> Unit
-): RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     private lateinit var binding: ItemScheduleBinding
 
@@ -32,16 +32,18 @@ class ScheduleAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val prayer = listPrayer[position]
-        with(binding){
+        with(binding) {
             tvTime.text = prayer.time
             ivSound.setImageResource(
                 if (prayer.isReminded) R.drawable.ic_sound_on else R.drawable.ic_sound_off
             )
-            btnSound.setOnClickListener { onSetReminder(timingSchedule, prayer.time, !prayer.isReminded, position) }
+            btnSound.setOnClickListener {
+                onSetReminder(timingSchedule, prayer.time, !prayer.isReminded, position)
+            }
             tvTimeName.text = timingSchedule.getScheduleName(prayer)
             val nearestSchedule = timingSchedule.getNearestSchedule(Timestamp.now())
             root.apply {
-                if (nearestSchedule.time == prayer.time){
+                if (nearestSchedule.time == prayer.time) {
                     strokeWidth = 4
                     setStrokeColor(ContextCompat.getColorStateList(this.context, R.color.primary))
                     setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.primary_10))

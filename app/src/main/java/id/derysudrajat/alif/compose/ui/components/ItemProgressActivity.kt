@@ -34,7 +34,7 @@ fun ItemProgressActivity(
     onClick: () -> Unit
 ) {
     val taskProgress = listOfTask.filter { it.isCheck }.size.toDouble()
-    val percentage = (taskProgress / listOfTask.size.toDouble())
+    val percentage = if (taskProgress != 0.0) (taskProgress / listOfTask.size.toDouble()) else 0.0
     Card(
         modifier = Modifier
             .fillMaxWidth()

@@ -12,7 +12,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
-import id.derysudrajat.alif.data.model.*
+import id.derysudrajat.alif.data.model.Prayer
+import id.derysudrajat.alif.data.model.PrayerReminder
+import id.derysudrajat.alif.data.model.Schedule
+import id.derysudrajat.alif.data.model.TimingSchedule
+import id.derysudrajat.alif.data.model.getScheduleName
+import id.derysudrajat.alif.data.model.hour
+import id.derysudrajat.alif.data.model.minutes
+import id.derysudrajat.alif.data.model.toList
+import id.derysudrajat.alif.data.model.toTimingSchedule
 import id.derysudrajat.alif.repo.PrayerRepository
 import id.derysudrajat.alif.repo.States
 import id.derysudrajat.alif.service.PrayerAlarm
@@ -22,7 +30,9 @@ import id.derysudrajat.alif.utils.TimeUtils.month
 import id.derysudrajat.alif.utils.TimeUtils.year
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,6 +63,7 @@ class HomeViewModel @Inject constructor(
                     Log.d("TAG", "getPrayerSchedule: loading")
                     isLoading = true
                 }
+
                 is States.Success -> {
                     isLoading = false
                     it.data.find { sc ->
@@ -69,6 +80,7 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }
+
                 is States.Failed -> {
                     isLoading = false
                     Log.d("TAG", "getPrayerSchedule: failed = ${it.message}")

@@ -25,7 +25,7 @@ import id.derysudrajat.alif.utils.TimeUtils.hourMinutes
 import id.derysudrajat.easyadapter.EasyAdapter
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
-import java.util.*
+import java.util.Date
 
 @AndroidEntryPoint
 class ProgressActivity : AppCompatActivity() {
@@ -120,7 +120,12 @@ class ProgressActivity : AppCompatActivity() {
 
     private fun onSwipeDelete() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-            override fun onMove(v: RecyclerView, h: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
+            override fun onMove(
+                v: RecyclerView,
+                h: RecyclerView.ViewHolder,
+                t: RecyclerView.ViewHolder
+            ) = false
+
             override fun onSwiped(h: RecyclerView.ViewHolder, dir: Int) {
                 viewModel.deleteTask(this@ProgressActivity, h.absoluteAdapterPosition)
             }

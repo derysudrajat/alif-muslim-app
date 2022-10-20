@@ -1,4 +1,4 @@
-package id.derysudrajat.alif.compose
+package id.derysudrajat.alif.compose.page
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
@@ -8,7 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import id.derysudrajat.alif.compose.ui.components.*
+import id.derysudrajat.alif.compose.ui.components.ItemCalendar
+import id.derysudrajat.alif.compose.ui.components.ItemMainDate
+import id.derysudrajat.alif.compose.ui.components.ItemProgressActivity
+import id.derysudrajat.alif.compose.ui.components.ItemSchedule
+import id.derysudrajat.alif.compose.ui.components.ItemTimingSchedule
+import id.derysudrajat.alif.compose.ui.components.dummyCalendar
+import id.derysudrajat.alif.compose.ui.components.dummyDescNextPray
+import id.derysudrajat.alif.compose.ui.components.dummyListProgressTask
+import id.derysudrajat.alif.compose.ui.components.dummyLocationAddress
+import id.derysudrajat.alif.compose.ui.components.dummyNextPray
+import id.derysudrajat.alif.compose.ui.components.dummyTimingSchedule
 import id.derysudrajat.alif.data.model.DateSchedule
 import id.derysudrajat.alif.data.model.Prayer
 import id.derysudrajat.alif.data.model.ProgressTask
