@@ -13,4 +13,10 @@ data class Surah(
     val audioUrl: String,
     val type: String,
     val index: Int
-) : Parcelable
+) : Parcelable {
+    companion object {
+        val empty = Surah(
+            "", 0, 0, "", "", "", "", 0
+        )
+    }
+}

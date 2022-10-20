@@ -1,8 +1,13 @@
-package id.derysudrajat.alif.compose
+package id.derysudrajat.alif.compose.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import id.derysudrajat.alif.R
+import id.derysudrajat.alif.compose.state.SurahUiState
 import id.derysudrajat.alif.compose.ui.components.BaseTopBar
 import id.derysudrajat.alif.compose.ui.components.ItemAudio
 import id.derysudrajat.alif.compose.ui.components.ItemAyah
@@ -24,32 +30,41 @@ import id.derysudrajat.alif.compose.ui.foundation.text.TextBody
 import id.derysudrajat.alif.compose.ui.foundation.text.TextHeadingXLarge
 import id.derysudrajat.alif.compose.ui.theme.Primary
 import id.derysudrajat.alif.compose.ui.theme.White
-import id.derysudrajat.alif.data.model.Ayah
 import id.derysudrajat.alif.data.model.Surah
 
 @Composable
 fun SurahPage(
-    surah: Surah,
-    listAyah: List<Ayah>,
-    audioProgress: Float,
-    isFinish: Boolean?,
-    onBack: () -> Unit,
-    onStart: () -> Unit,
-    onPause: () -> Unit
+    surahUiState: SurahUiState
 ) {
     Scaffold(modifier = Modifier.padding(16.dp), topBar = {
-        BaseTopBar(title = surah.name, onBack)
+        BaseTopBar(title = surahUiState.surah.name, surahUiState.onBack)
     }) { paddingValues ->
-        LazyColumn(
-            contentPadding = paddingValues
-        ) {
-            item { ItemHeaderSurah(surah) }
-            item { ItemAudio(audioProgress, isFinish, onStart, onPause) }
-            items(listAyah) {
-                if (surah.index != 1) ItemAyah(it)
-                else {
-                    if (it.no != 1) ItemAyah(it)
-                }
+        SurahContent(paddingValues = paddingValues, surahUiState = surahUiState)
+    }
+}
+
+@Composable
+fun SurahContent(
+    modifier: Modifier = Modifier,
+    surahUiState: SurahUiState,
+    paddingValues: PaddingValues = PaddingValues(horizontal = 16.dp),
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = paddingValues
+    ) {
+        item { ItemHeaderSurah(surahUiState.surah) }
+        item {
+            ItemAudio(
+                surahUiState.audioProgress, surahUiState.isFinish,
+                surahUiState.currentDurationPosition,
+                surahUiState.onStart, surahUiState.onPause
+            )
+        }
+        items(surahUiState.listAyah) {
+            if (surahUiState.surah.index != 1) ItemAyah(it)
+            else {
+                if (it.no != 1) ItemAyah(it)
             }
         }
     }
@@ -132,7 +147,7 @@ fun ItemHeaderSurah(
 
 @Preview
 @Composable
-fun PreviewItemHeaderSurah() {
+private fun PreviewItemHeaderSurah() {
     ItemHeaderSurah(
         Surah(
             "An-Naas",

@@ -1,6 +1,5 @@
 package id.derysudrajat.alif.compose.ui.components
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,30 +12,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import id.derysudrajat.alif.compose.ui.foundation.text.*
+import id.derysudrajat.alif.compose.ui.foundation.text.TextArabic
+import id.derysudrajat.alif.compose.ui.foundation.text.TextBody
+import id.derysudrajat.alif.compose.ui.foundation.text.TextBodySmall
+import id.derysudrajat.alif.compose.ui.foundation.text.TextHeading
+import id.derysudrajat.alif.compose.ui.foundation.text.TextSubtitle
 import id.derysudrajat.alif.compose.ui.theme.AlifThemes
 import id.derysudrajat.alif.compose.ui.theme.White
 import id.derysudrajat.alif.data.model.Surah
-import id.derysudrajat.alif.ui.quran.SurahActivity
 
 @Composable
-fun ItemSurah(surah: Surah) {
-    val context = LocalContext.current
+fun ItemSurah(surah: Surah, onClick: (Surah) -> Unit) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .clip(RoundedCornerShape(16.dp))
             .clickable {
-                context.startActivity(Intent(context, SurahActivity::class.java).apply {
-                    putExtra(SurahActivity.EXTRA_SURAH, surah)
-                })
+                onClick(surah)
             }
             .padding(16.dp)
     ) {
@@ -110,5 +108,7 @@ private fun PreviewItemSurah() {
             "Makkiyah",
             114
         )
-    )
+    ) {
+
+    }
 }

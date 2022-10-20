@@ -12,7 +12,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
-import id.derysudrajat.alif.compose.HomePage
+import id.derysudrajat.alif.compose.page.HomePage
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
 import id.derysudrajat.alif.data.model.TimingSchedule
 import id.derysudrajat.alif.databinding.ActivityMainBinding

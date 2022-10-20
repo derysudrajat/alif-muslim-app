@@ -13,7 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import id.derysudrajat.alif.compose.CompassPage
+import id.derysudrajat.alif.compose.page.CompassPage
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
 import id.derysudrajat.alif.data.model.RotationTarget
 import id.derysudrajat.alif.utils.LocationUtils

@@ -7,7 +7,7 @@ import android.os.Handler
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import id.derysudrajat.alif.compose.SplashPage
+import id.derysudrajat.alif.compose.page.SplashPage
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
 import id.derysudrajat.alif.ui.main.MainActivity
 import id.derysudrajat.alif.utils.LocationUtils

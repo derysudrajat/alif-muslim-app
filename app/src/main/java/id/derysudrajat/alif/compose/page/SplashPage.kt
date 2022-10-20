@@ -1,4 +1,4 @@
-package id.derysudrajat.alif.compose
+package id.derysudrajat.alif.compose.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize

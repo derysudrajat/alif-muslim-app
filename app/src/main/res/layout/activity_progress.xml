@@ -46,6 +46,7 @@
         android:backgroundTint="@color/white_20"
         android:max="10"
         android:progress="0"
+        tools:progress="7"
         app:indicatorColor="@color/secondary"
         app:layout_constraintEnd_toEndOf="@+id/tvTotalTask"
         app:layout_constraintHorizontal_bias="0.0"
@@ -97,11 +98,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvActivity"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:paddingHorizontal="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="78dp"
-            android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_activity" />
     </androidx.core.widget.NestedScrollView>

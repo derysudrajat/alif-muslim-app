@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.derysudrajat.alif.data.model.RotationTarget
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 
 class CompassViewModel : ViewModel() {
 
