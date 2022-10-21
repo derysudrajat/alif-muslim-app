@@ -136,6 +136,8 @@ dependencies {
     // Integration with observables
     implementation 'androidx.compose.runtime:runtime-livedata:1.2.1'
 
+    implementation "androidx.compose.material3:material3-window-size-class:1.0.0-rc01"
+
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.1'
 

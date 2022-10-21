@@ -27,6 +27,9 @@ import id.derysudrajat.alif.compose.ui.components.ItemSurah
 import id.derysudrajat.alif.compose.ui.foundation.text.TextHeading
 import id.derysudrajat.alif.compose.ui.foundation.text.TextTitle
 import id.derysudrajat.alif.compose.ui.navigation.QuranBottomNav
+import id.derysudrajat.alif.compose.ui.navigation.QuranNavDrawer
+import id.derysudrajat.alif.compose.ui.navigation.QuranNavType
+import id.derysudrajat.alif.compose.ui.navigation.QuranNavigationRail
 import id.derysudrajat.alif.compose.ui.theme.AlifTheme
 import id.derysudrajat.alif.data.model.Juz
 import id.derysudrajat.alif.data.model.Surah
@@ -54,32 +57,57 @@ fun QuranPage(
 fun QuranContent(
     modifier: Modifier,
     quranUiState: QuranUiState,
+    navType: QuranNavType,
     onClick: (Surah) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
     ) {
-        val (tabLayout, content, navRail) = createRefs()
+        val (tabLayout, content, navRail, navDraw) = createRefs()
         var tabIndex by remember { mutableStateOf(0) }
 
-        QuranBottomNav(modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .constrainAs(tabLayout) {
-                bottom.linkTo(parent.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-                width = Dimension.fillToConstraints
-            }, tabIndex = tabIndex, onClick = { tabIndex = it })
+        when (navType) {
+            QuranNavType.BottomNav -> {
+                QuranBottomNav(modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .constrainAs(tabLayout) {
+                        bottom.linkTo(parent.bottom, margin = 16.dp)
+                        end.linkTo(parent.end, margin = 16.dp)
+                        start.linkTo(parent.start, margin = 16.dp)
+                        width = Dimension.fillToConstraints
+                    }, tabIndex = tabIndex, onClick = { tabIndex = it })
+            }
 
-        val contentModifier = Modifier.constrainAs(content) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(tabLayout.top)
-            width = Dimension.fillToConstraints
-            height = Dimension.fillToConstraints
+            QuranNavType.NavRail -> {
+                QuranNavigationRail(
+                    Modifier.constrainAs(navRail) { start.linkTo(parent.start) }, tabIndex
+                ) { tabIndex = it }
+            }
+
+            QuranNavType.NavDrawer -> {
+                QuranNavDrawer(
+                    Modifier.constrainAs(navDraw) { start.linkTo(parent.start) },
+                    tabIndex, { tabIndex = it }) {
+                    ContainerPage(Modifier.fillMaxSize(), tabIndex, quranUiState, onClick)
+                }
+            }
         }
-        ContainerPage(contentModifier, tabIndex, quranUiState, onClick)
+
+        if (navType != QuranNavType.NavDrawer) {
+            val contentModifier = Modifier.constrainAs(content) {
+                top.linkTo(parent.top)
+                start.linkTo(
+                    if (navType == QuranNavType.NavRail) navRail.end else parent.start
+                )
+                end.linkTo(parent.end)
+                bottom.linkTo(
+                    if (navType == QuranNavType.BottomNav) tabLayout.top else parent.bottom
+                )
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            ContainerPage(contentModifier, tabIndex, quranUiState, onClick)
+        }
     }
 }
 
@@ -172,6 +200,7 @@ private fun PreviewQuranContent() {
         QuranContent(
             modifier = Modifier.fillMaxSize(),
             quranUiState = QuranUiState(),
+            navType = QuranNavType.NavRail,
             onClick = {})
     }
 }
