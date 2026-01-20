@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -7,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -15,7 +15,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -25,18 +25,18 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     js {
         browser()
         binaries.executable()
     }
-    
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         binaries.executable()
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -51,6 +51,34 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // compose lottie
+            implementation(libs.compottie)
+            implementation(libs.compottie.lite)
+            implementation(libs.compottie.dot)
+            implementation(libs.compottie.network)
+            implementation(libs.compottie.resources)
+
+            // constraint layout
+            /// Compose 1.9.0+
+            implementation("tech.annexflow.compose:constraintlayout-compose-multiplatform:0.6.1")
+            /// Compose 1.9.0+ with different tech.annexflow.constraintlayout.core package
+            implementation("tech.annexflow.compose:constraintlayout-compose-multiplatform:0.6.1-shaded-core")
+            /// Compose 1.9.0+ with different tech.annexflow.constraintlayout package
+            implementation("tech.annexflow.compose:constraintlayout-compose-multiplatform:0.6.1-shaded")
+
+            // liquid glass
+            // implementation("com.github.skydoves:cloudy:0.5.0")
+
+            // navigation 3
+            implementation(libs.jetbrains.navigation3.ui)
+            implementation(libs.jetbrains.material3.adaptiveNavigation3)
+            implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
+
+            implementation(libs.kotlinx.serialization.json)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.navigation3.browser)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -88,4 +116,3 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-
