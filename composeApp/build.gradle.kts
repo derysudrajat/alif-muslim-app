@@ -41,6 +41,11 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.koin.android)
+            implementation(libs.play.services.location)
+            implementation(libs.moko.permissions)
+            implementation(libs.moko.permissions.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -74,13 +79,34 @@ kotlin {
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.jetbrains.material3.adaptiveNavigation3)
             implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
-            implementation(libs.kotlinx.serialization.json)
 
             // calendar view
             implementation("com.kizitonwose.calendar:compose-multiplatform:2.10.0")
+
+            // ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+
+            // koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+        }
+        jsMain.dependencies {
+            implementation(libs.kotlinx.browser)
         }
         wasmJsMain.dependencies {
             implementation(libs.navigation3.browser)
+            implementation(libs.ktor.client.js)
+            implementation(libs.kotlinx.browser)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+            implementation(libs.moko.permissions)
+            implementation(libs.moko.permissions.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

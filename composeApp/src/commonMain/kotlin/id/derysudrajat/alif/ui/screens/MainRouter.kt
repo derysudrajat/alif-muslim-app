@@ -50,7 +50,9 @@ fun MainRouter() {
 
                 is MainNav.Home -> NavEntry(key) {
                     HomeContent(
-                        goToCalendar = {}
+                        goToCalendar = {
+                            backStack.add(MainNav.Calendar)
+                        }
                     )
                 }
 

@@ -30,7 +30,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HeaderHome() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().background(AppColor.Background)
+            .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Card(
@@ -95,8 +96,6 @@ fun HeaderHome() {
 @Composable
 private fun PreviewHeaderHome() {
     MaterialTheme {
-        Box(modifier = Modifier.background(AppColor.Background).padding(32.dp)) {
-            HeaderHome()
-        }
+        HeaderHome()
     }
 }

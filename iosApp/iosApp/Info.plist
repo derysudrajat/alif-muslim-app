@@ -4,5 +4,7 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+    <key>Privacy - Location When In Use Usage Description</key>
+    <string>We need your location to calculate accurate prayer times.</string>
 </dict>
 </plist>
