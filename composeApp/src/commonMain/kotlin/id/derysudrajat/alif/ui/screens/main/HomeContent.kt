@@ -14,7 +14,9 @@ import id.derysudrajat.alif.ui.themes.AppColor
 import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 
 @Composable
-fun HomeContent() {
+fun HomeContent(
+    goToCalendar: () -> Unit
+) {
     Scaffold(
         containerColor = AppColor.Background,
         modifier = Modifier.fillMaxSize()
@@ -34,7 +36,9 @@ fun HomeContent() {
                 HomeTaskItem()
             }
             item {
-                HomeCalendarItem()
+                HomeCalendarItem(
+                    onClick = goToCalendar
+                )
             }
             items(6) {
                 ScheduleItem()
@@ -47,6 +51,8 @@ fun HomeContent() {
 @Composable
 private fun PreviewHomeContent() {
     MaterialTheme {
-        HomeContent()
+        HomeContent(
+            goToCalendar = {}
+        )
     }
 }

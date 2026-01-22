@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import id.derysudrajat.alif.ui.components.AppNav
 import id.derysudrajat.alif.ui.components.AppNavigation
+import id.derysudrajat.alif.ui.screens.calendar.IslamicCalendarContent
 import id.derysudrajat.alif.ui.screens.main.HomeContent
 import id.derysudrajat.alif.ui.screens.splash.SplashScreen
 import kotlinx.serialization.InternalSerializationApi
@@ -19,6 +20,9 @@ object MainNav {
 
     @Serializable
     data object Home : NavKey
+
+    @Serializable
+    data object Calendar : NavKey
 }
 
 @OptIn(InternalSerializationApi::class)
@@ -28,12 +32,13 @@ fun MainRouter() {
         AppNav.getConfiguration {
             subclass(MainNav.Splash::class, MainNav.Splash::class.serializer())
             subclass(MainNav.Home::class, MainNav.Home::class.serializer())
+            subclass(MainNav.Calendar::class, MainNav.Calendar::class.serializer())
         }, MainNav.Splash
     )
 
     AppNavigation(
         backStack = backStack,
-        onBack = {},
+        onBack = backStack::removeLastOrNull,
         entryProvider = { key ->
             when (key) {
                 is MainNav.Splash -> NavEntry(key) {
@@ -44,11 +49,26 @@ fun MainRouter() {
                 }
 
                 is MainNav.Home -> NavEntry(key) {
-                    HomeContent()
+                    HomeContent(
+                        goToCalendar = {}
+                    )
+                }
+
+                is MainNav.Calendar -> NavEntry(key) {
+                    IslamicCalendarContent(
+                        onBack = {
+                            backStack.removeLastOrNull()
+                        }
+                    )
                 }
 
                 else -> NavEntry(key) { Text("Unknown route") }
             }
         }
     )
+}
+
+@Composable
+fun CalendarContent() {
+    TODO("Not yet implemented")
 }

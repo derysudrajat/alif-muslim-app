@@ -20,14 +20,15 @@ import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 
 @Composable
 fun IslamicCalendarContent(
+    onBack: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = AppColor.Background,
         topBar = {
-            AppTopBar {
-
-            }
+            AppTopBar(
+                onBack = onBack
+            )
         }
     ) { innerPadding ->
         Column(
@@ -52,6 +53,8 @@ fun IslamicCalendarContent(
 @Composable
 private fun PreviewIslamicCalendarContent() {
     MaterialTheme {
-        IslamicCalendarContent()
+        IslamicCalendarContent(
+            onBack = {}
+        )
     }
 }

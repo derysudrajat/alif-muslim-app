@@ -32,7 +32,9 @@ import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
-fun HomeCalendarItem() {
+fun HomeCalendarItem(
+    onClick: () -> Unit
+) {
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
             containerColor = AppColor.Background
@@ -79,7 +81,7 @@ fun HomeCalendarItem() {
                     fontWeight = FontWeight.Bold,
                     color = AppColor.Text
                 )
-                IconButton(onClick = {}) {
+                IconButton(onClick = onClick) {
                     Icon(
                         painter = painterResource(Res.drawable.icon_arrow_right),
                         contentDescription = null,
@@ -112,7 +114,9 @@ fun HomeCalendarItem() {
 private fun PreviewHomeCalendarItem() {
     MaterialTheme {
         Box(modifier = Modifier.fillMaxWidth().background(AppColor.Background).padding(16.dp)) {
-            HomeCalendarItem()
+            HomeCalendarItem(
+                onClick = {}
+            )
         }
     }
 }
