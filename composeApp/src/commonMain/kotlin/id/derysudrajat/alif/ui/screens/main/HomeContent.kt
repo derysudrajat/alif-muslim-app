@@ -9,9 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import id.derysudrajat.alif.ui.themes.AppColor
+import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 
 @Composable
 fun HomeContent() {
@@ -30,11 +30,20 @@ fun HomeContent() {
             item {
                 ScheduleTimeCard()
             }
+            item {
+                HomeTaskItem()
+            }
+            item {
+                HomeCalendarItem()
+            }
+            items(6) {
+                ScheduleItem()
+            }
         }
     }
 }
 
-@Preview
+@PreviewLightDarkWithBackground
 @Composable
 private fun PreviewHomeContent() {
     MaterialTheme {
