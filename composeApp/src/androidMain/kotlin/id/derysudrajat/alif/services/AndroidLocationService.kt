@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY
+import kotlinx.coroutines.tasks.await
 
 class AndroidLocationService(
     private val context: Context
@@ -19,7 +20,7 @@ class AndroidLocationService(
             val location = fusedLocationClient.getCurrentLocation(
                 PRIORITY_BALANCED_POWER_ACCURACY,
                 null
-            ).result
+            ).await()
 
             location?.let {
                 Location(it.latitude, it.longitude)

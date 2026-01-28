@@ -1,10 +1,12 @@
 package id.derysudrajat.alif.services
 
+import dev.icerock.moko.permissions.PermissionsController
 import org.koin.core.module.Module
 
 expect val permissionModule: Module
 
 interface AppPermissionControl {
+    val controller: PermissionsController
     suspend fun checkAndRequestLocation()
     fun openSettings()
 }

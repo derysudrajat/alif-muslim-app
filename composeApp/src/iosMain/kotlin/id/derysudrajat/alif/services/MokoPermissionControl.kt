@@ -4,12 +4,16 @@ import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
 
 class MokoPermissionControl(
-    private val controller: PermissionsController
+    override val controller: PermissionsController
 ) : AppPermissionControl {
 
     override suspend fun checkAndRequestLocation() {
         // Delegates to Moko
-        controller.providePermission(Permission.LOCATION)
+        val isGranted = controller.isPermissionGranted(Permission.LOCATION)
+        println("is Permission Granted = $isGranted")
+        if (!isGranted) {
+            controller.providePermission(Permission.LOCATION)
+        }
     }
 
     override fun openSettings() {

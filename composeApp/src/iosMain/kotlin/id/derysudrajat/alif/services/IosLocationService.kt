@@ -25,6 +25,8 @@ class IosLocationService : LocationService {
             override fun locationManager(manager: CLLocationManager, didUpdateLocations: List<*>) {
                 val locations = didUpdateLocations as List<CLLocation>
                 val validLocation = locations.lastOrNull()
+                println("listLocation = $locations")
+                println("validLocation = $validLocation")
                 if (validLocation != null) {
                     locationManager.stopUpdatingLocation()
                     cont.resume(

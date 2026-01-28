@@ -1,11 +1,15 @@
 package id.derysudrajat.alif.services
 
-import dev.icerock.moko.permissions.ios.PermissionsController
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
+import dev.icerock.moko.permissions.PermissionsController
 import org.koin.dsl.module
+import dev.icerock.moko.permissions.ios.PermissionsController as IosPermissionsController
 
 actual val permissionModule = module {
-    single { PermissionsController() }
-    singleOf(::MokoPermissionControl) { bind<AppPermissionControl>() }
+    single<PermissionsController> { IosPermissionsController() }
+
+    single<AppPermissionControl> {
+        MokoPermissionControl(
+            controller = get()
+        )
+    }
 }

@@ -41,11 +41,12 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.android)
             implementation(libs.koin.android)
             implementation(libs.play.services.location)
             implementation(libs.moko.permissions)
             implementation(libs.moko.permissions.compose)
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -94,14 +95,17 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.moko.permissions.compose)
         }
         jsMain.dependencies {
             implementation(libs.kotlinx.browser)
+            implementation(libs.moko.permissions.compose)
         }
         wasmJsMain.dependencies {
             implementation(libs.navigation3.browser)
             implementation(libs.ktor.client.js)
             implementation(libs.kotlinx.browser)
+            implementation(libs.moko.permissions.compose)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

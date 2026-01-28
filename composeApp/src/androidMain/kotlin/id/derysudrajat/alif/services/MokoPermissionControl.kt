@@ -4,7 +4,7 @@ import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
 
 class MokoPermissionControl(
-    private val controller: PermissionsController
+    override val controller: PermissionsController
 ) : AppPermissionControl {
 
     override suspend fun checkAndRequestLocation() {
