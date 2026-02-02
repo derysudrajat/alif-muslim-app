@@ -21,7 +21,7 @@ object UseCase {
     ) {
         onResult(ApiResult.Loading)
         try {
-            val response = withContext(Dispatchers.Default) { block() }
+            val response = withContext(Dispatchers.Main) { block() }
             onResult(ApiResult.Success(response))
         } catch (e: ApiException) {
             println("UseCase:Failed:ApiException: $e")

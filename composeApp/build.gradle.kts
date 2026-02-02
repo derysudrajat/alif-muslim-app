@@ -41,8 +41,9 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.android)
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.kotlinx.coroutines.android)
             implementation(libs.play.services.location)
             implementation(libs.moko.permissions)
             implementation(libs.moko.permissions.compose)
@@ -78,6 +79,7 @@ kotlin {
 
             // navigation 3
             implementation(libs.jetbrains.navigation3.ui)
+            implementation(libs.navigation.compose)
             implementation(libs.jetbrains.material3.adaptiveNavigation3)
             implementation(libs.jetbrains.lifecycle.viewmodelNavigation3)
 
@@ -86,26 +88,26 @@ kotlin {
 
             // ktor
             implementation(libs.ktor.client.core)
-            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.serialization.kotlinx.json)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.kotlinx.coroutines.core)
 
             // koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            implementation(libs.moko.permissions.compose)
         }
         jsMain.dependencies {
             implementation(libs.kotlinx.browser)
-            implementation(libs.moko.permissions.compose)
+            implementation(libs.ktor.client.js)
         }
         wasmJsMain.dependencies {
             implementation(libs.navigation3.browser)
-            implementation(libs.ktor.client.js)
             implementation(libs.kotlinx.browser)
-            implementation(libs.moko.permissions.compose)
+            implementation(libs.ktor.client.js)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

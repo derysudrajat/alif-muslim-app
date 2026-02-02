@@ -1,26 +1,23 @@
 package id.derysudrajat.alif
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import androidx.core.content.ContextCompat
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionsController
 import id.derysudrajat.alif.services.PermissionService
 import id.derysudrajat.alif.services.PermissionStatus
 
 class AndroidPermissionService(
     private val context: Context,
+    private val controller: PermissionsController
 ) : PermissionService {
 
     override suspend fun checkLocationPermission(): PermissionStatus {
-        val hasFine =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-        val hasCoarse =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        return if (hasFine == PackageManager.PERMISSION_GRANTED || hasCoarse == PackageManager.PERMISSION_GRANTED) {
+        val hasFine = controller.isPermissionGranted(Permission.LOCATION)
+        val hasCoarse = controller.isPermissionGranted(Permission.COARSE_LOCATION)
+        return if (hasFine || hasCoarse) {
             PermissionStatus.GRANTED
         } else {
             PermissionStatus.DENIED
@@ -28,7 +25,11 @@ class AndroidPermissionService(
     }
 
     override suspend fun requestLocationPermission() {
-
+        try {
+            controller.providePermission(Permission.LOCATION)
+        } catch (e: Exception) {
+            println("Permission denied: ${e.message}")
+        }
     }
 
     override fun openSettings() {

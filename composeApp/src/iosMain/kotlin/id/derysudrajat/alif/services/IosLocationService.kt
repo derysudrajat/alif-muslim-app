@@ -15,34 +15,61 @@ import kotlin.coroutines.suspendCoroutine
 class IosLocationService : LocationService {
     private val locationManager = CLLocationManager()
 
-    @OptIn(ExperimentalForeignApi::class)
-    override suspend fun getCurrentLocation(): Location = suspendCoroutine { cont ->
+    // 1. Keep a strong reference to the delegate here!
+    // If it's a local variable inside the function, it gets garbage collected.
+    private var locationDelegate: LocationDelegate? = null
+
+    override suspend fun getCurrentLocation(): Location = suspendCoroutine { continuation ->
+        // 2. Configure Manager
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
 
-        // Create a delegate to listen for the async result
-        val delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
-            override fun locationManager(manager: CLLocationManager, didUpdateLocations: List<*>) {
-                val locations = didUpdateLocations as List<CLLocation>
-                val validLocation = locations.lastOrNull()
-                println("listLocation = $locations")
-                println("validLocation = $validLocation")
-                if (validLocation != null) {
-                    locationManager.stopUpdatingLocation()
-                    cont.resume(
-                        Location(
-                        validLocation.coordinate.useContents { latitude },
-                        validLocation.coordinate.useContents { longitude }
-                    ))
-                }
-            }
+        // 3. Create and assign the delegate
+        val delegate = LocationDelegate(continuation) {
+            // Cleanup callback when done
+            locationManager.stopUpdatingLocation()
+            locationDelegate = null
+        }
 
-            override fun locationManager(manager: CLLocationManager, didFailWithError: NSError) {
-                cont.resumeWithException(LocationException(didFailWithError.localizedDescription))
+        // Save it to the class property so it doesn't vanish
+        locationDelegate = delegate
+        locationManager.delegate = delegate
+
+        // 4. Start
+        locationManager.startUpdatingLocation()
+    }
+
+    // 5. Define the Delegate as a proper private inner class
+    private class LocationDelegate(
+        private val continuation: kotlin.coroutines.Continuation<Location>,
+        private val onComplete: () -> Unit
+    ) : NSObject(), CLLocationManagerDelegateProtocol {
+
+        // Flag to prevent double-resuming (The fix for "Already Resumed"!)
+        private var isResumed = false
+
+        @OptIn(ExperimentalForeignApi::class)
+        override fun locationManager(manager: CLLocationManager, didUpdateLocations: List<*>) {
+            val locations = didUpdateLocations as List<CLLocation>
+            val validLocation = locations.lastOrNull()
+
+            if (validLocation != null && !isResumed) {
+                isResumed = true
+                onComplete() // Clean up the parent reference
+
+                val lat = validLocation.coordinate.useContents { latitude }
+                val long = validLocation.coordinate.useContents { longitude }
+
+                continuation.resume(Location(lat, long))
             }
         }
 
-        locationManager.delegate = delegate
-        locationManager.startUpdatingLocation()
+        override fun locationManager(manager: CLLocationManager, didFailWithError: NSError) {
+            if (!isResumed) {
+                isResumed = true
+                onComplete()
+                continuation.resumeWithException(Exception(didFailWithError.localizedDescription))
+            }
+        }
     }
 }

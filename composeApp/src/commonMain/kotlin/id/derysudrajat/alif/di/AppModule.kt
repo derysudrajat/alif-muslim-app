@@ -12,12 +12,11 @@ import id.derysudrajat.alif.services.permissionModule
 import id.derysudrajat.alif.services.platformModule
 import id.derysudrajat.alif.ui.screens.main.MainViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
@@ -28,14 +27,6 @@ object AppModule {
     val appModule = module {
         single {
             HttpClient {
-                install(UserAgent) {
-                    agent = "AlifMuslimApp/1.0"
-                }
-                install(HttpTimeout) {
-                    requestTimeoutMillis = 5000
-                    connectTimeoutMillis = 5000
-                    socketTimeoutMillis = 5000
-                }
                 install(ContentNegotiation) {
                     json(
                         Json {
@@ -47,12 +38,7 @@ object AppModule {
                 }
                 install(Logging) {
                     level = LogLevel.ALL
-                    logger = object : Logger {
-                        override fun log(message: String) {
-                            println("HTTP Client: $message")
-                        }
-
-                    }
+                    logger = Logger.SIMPLE
                 }
             }
         }

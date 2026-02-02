@@ -1,31 +1,33 @@
 package id.derysudrajat.alif
 
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.ios.PermissionsController
 import id.derysudrajat.alif.services.PermissionService
 import id.derysudrajat.alif.services.PermissionStatus
-import platform.CoreLocation.CLLocationManager
-import platform.CoreLocation.kCLAuthorizationStatusAuthorizedAlways
-import platform.CoreLocation.kCLAuthorizationStatusAuthorizedWhenInUse
-import platform.CoreLocation.kCLAuthorizationStatusDenied
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 import platform.UIKit.UIApplicationOpenSettingsURLString
 
-class IosPermissionService : PermissionService {
-    private val locationManager = CLLocationManager()
+class IosPermissionService(
+    private val controller: PermissionsController
+) : PermissionService {
 
     override suspend fun checkLocationPermission(): PermissionStatus {
-        val status = locationManager.authorizationStatus
-        return when (status) {
-            kCLAuthorizationStatusAuthorizedAlways,
-            kCLAuthorizationStatusAuthorizedWhenInUse -> PermissionStatus.GRANTED
-
-            kCLAuthorizationStatusDenied -> PermissionStatus.DENIED
+        val statusLocation = controller.isPermissionGranted(Permission.LOCATION)
+        val statusLocationCoarse = controller.isPermissionGranted(Permission.COARSE_LOCATION)
+        return when {
+            statusLocation || statusLocationCoarse -> PermissionStatus.GRANTED
+            !statusLocation && !statusLocationCoarse -> PermissionStatus.DENIED
             else -> PermissionStatus.NOT_DETERMINED
         }
     }
 
     override suspend fun requestLocationPermission() {
-        locationManager.requestWhenInUseAuthorization()
+        try {
+            controller.providePermission(Permission.LOCATION)
+        } catch (e: Exception) {
+            println("Permission denied: ${e.message}")
+        }
     }
 
     override fun openSettings() {
