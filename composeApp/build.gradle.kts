@@ -16,6 +16,10 @@ kotlin {
         }
     }
 
+    compilerOptions {
+        freeCompilerArgs.add("-Xexplicit-backing-fields")
+    }
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()

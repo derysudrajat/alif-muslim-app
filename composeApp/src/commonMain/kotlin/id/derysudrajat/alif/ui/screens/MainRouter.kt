@@ -5,9 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
+import id.derysudrajat.alif.services.Location
 import id.derysudrajat.alif.ui.components.AppNav
 import id.derysudrajat.alif.ui.components.AppNavigation
-import id.derysudrajat.alif.ui.screens.calendar.IslamicCalendarContent
+import id.derysudrajat.alif.ui.screens.calendar.IslamicCalendarScreen
 import id.derysudrajat.alif.ui.screens.main.HomeContent
 import id.derysudrajat.alif.ui.screens.splash.SplashScreen
 import kotlinx.serialization.InternalSerializationApi
@@ -22,7 +23,10 @@ object MainNav {
     data object Home : NavKey
 
     @Serializable
-    data object Calendar : NavKey
+    data class Calendar(
+        val latitude: Double,
+        val longitude: Double
+    ) : NavKey
 }
 
 @OptIn(InternalSerializationApi::class)
@@ -51,16 +55,15 @@ fun MainRouter() {
                 is MainNav.Home -> NavEntry(key) {
                     HomeContent(
                         goToCalendar = {
-                            backStack.add(MainNav.Calendar)
+                            backStack.add(MainNav.Calendar(it.latitude, it.longitude))
                         }
                     )
                 }
 
                 is MainNav.Calendar -> NavEntry(key) {
-                    IslamicCalendarContent(
-                        onBack = {
-                            backStack.removeLastOrNull()
-                        }
+                    IslamicCalendarScreen(
+                        location = Location(key.latitude, key.longitude),
+                        onBack = backStack::removeLastOrNull
                     )
                 }
 

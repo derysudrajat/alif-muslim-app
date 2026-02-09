@@ -1,8 +1,11 @@
 package id.derysudrajat.alif.domain.model
 
 import id.derysudrajat.alif.data.remote.response.ScheduleResponse
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
@@ -62,6 +65,94 @@ data class PrayerData(
 ) {
     companion object {
         val Empty = PrayerData("-", false)
+    }
+}
+
+sealed class PrayerStatus {
+    data class Prepare(val prayer: PrayerData) : PrayerStatus()
+    data class ItsTime(val prayer: PrayerData) : PrayerStatus()
+    data class Next(val prayer: PrayerData) : PrayerStatus()
+}
+
+fun getPrayerStatus(
+    schedules: List<PrayerData>,
+    currentMinutes: Int
+): PrayerStatus {
+
+    val activePrayer = schedules.firstOrNull {
+        val pMin = parseToMinutes(it.time)
+        val minutesPassed = (currentMinutes - pMin + 1440) % 1440
+
+        minutesPassed in 0..5
+    }
+
+    if (activePrayer != null) {
+        return PrayerStatus.ItsTime(activePrayer)
+    }
+
+    val preparingPrayer = schedules.firstOrNull {
+        val pMin = parseToMinutes(it.time)
+        val minutesUntil = (pMin - currentMinutes + 1440) % 1440
+
+        minutesUntil in 1..5
+    }
+
+    if (preparingPrayer != null) {
+        return PrayerStatus.Prepare(preparingPrayer)
+    }
+
+    val nextPrayer = schedules.minByOrNull {
+        val pMin = parseToMinutes(it.time)
+        val minutesUntil = (pMin - currentMinutes + 1440) % 1440
+        minutesUntil
+    }!!
+
+    return PrayerStatus.Next(nextPrayer)
+}
+
+fun parseToMinutes(timeString: String): Int {
+    val cleanTime = timeString.substringBefore(" ").trim()
+    val parts = cleanTime.split(":")
+    val hour = parts[0].toInt()
+    val minute = parts[1].toInt()
+    return (hour * 60) + minute
+}
+
+fun getTimeUntil(targetTimeStr: String, now: LocalDateTime): String {
+    val timeZone = TimeZone.currentSystemDefault()
+    val cleanTime = targetTimeStr.substringBefore(" ").trim()
+    val (targetHour, targetMinute) = cleanTime.split(":").map { it.toInt() }
+    var targetDateTime = LocalDateTime(
+        year = now.year,
+        month = now.month,
+        day = now.day,
+        hour = targetHour,
+        minute = targetMinute,
+        second = 0,
+        nanosecond = 0
+    )
+
+    if (now > targetDateTime) {
+        val tomorrowDate = now.date.plus(DatePeriod(days = 1))
+        targetDateTime = LocalDateTime(
+            date = tomorrowDate,
+            time = targetDateTime.time
+        )
+    }
+
+    val nowInstant = now.toInstant(timeZone)
+    val targetInstant = targetDateTime.toInstant(timeZone)
+
+    val diffInSeconds = targetInstant.minus(nowInstant).inWholeSeconds
+
+    val hours = diffInSeconds / 3600
+    val minutes = (diffInSeconds % 3600) / 60
+    val seconds = diffInSeconds % 60
+
+    return buildString {
+        if (hours != 0L) append("${hours}h ")
+        if (minutes != 0L) append("${minutes}m ")
+        append("${seconds}s")
     }
 }
 

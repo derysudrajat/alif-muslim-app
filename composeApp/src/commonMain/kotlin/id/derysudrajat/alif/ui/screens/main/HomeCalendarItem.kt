@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import id.derysudrajat.alif.domain.model.PrayerScheduleData
 import id.derysudrajat.alif.ui.themes.AppColor
 import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 import org.jetbrains.compose.resources.painterResource
@@ -33,6 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun HomeCalendarItem(
+    schedule: PrayerScheduleData,
     onClick: () -> Unit
 ) {
     OutlinedCard(
@@ -98,9 +100,20 @@ fun HomeCalendarItem(
                     width = Dimension.fillToConstraints
                 }
             ) {
-                Text(text = "No Event Today", color = AppColor.Primary.Main)
                 Text(
-                    text = "22 Dzhul Hijjah 1443 AH",
+                    text = if (schedule.hijriDate.holidays.isNotEmpty()) schedule.hijriDate.holidays.joinToString(
+                        "\n"
+                    ) else "No Event Today", color = AppColor.Primary.Main
+                )
+                Text(
+                    text = buildString {
+                        if (schedule != PrayerScheduleData.Empty) {
+                            append(schedule.hijriDate.day).append(" ")
+                            append(schedule.hijriDate.monthDesignation).append(" ")
+                            append(schedule.hijriDate.year).append(" ")
+                            append(schedule.hijriDate.yearDesignation)
+                        } else append("-")
+                    },
                     color = AppColor.Text.copy(0.8f),
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -115,6 +128,7 @@ private fun PreviewHomeCalendarItem() {
     MaterialTheme {
         Box(modifier = Modifier.fillMaxWidth().background(AppColor.Background).padding(16.dp)) {
             HomeCalendarItem(
+                schedule = PrayerScheduleData.Empty,
                 onClick = {}
             )
         }

@@ -47,6 +47,9 @@
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to calculate accurate prayer times.</string>
+    <string>We need your location to calculate accurate Prayer Times.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to calculate accurate Prayer Times.</string>
 </dict>
 </plist>

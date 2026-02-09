@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusMonths
+import id.derysudrajat.alif.domain.model.PrayerScheduleData
 import id.derysudrajat.alif.ui.themes.AppColor
 import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 import kotlinx.datetime.DayOfWeek
@@ -39,7 +41,9 @@ import kotlinx.datetime.YearMonth
 
 @Composable
 fun IslamicCalendarComponent(
-    modifier: Modifier = Modifier
+    monthSchedules: List<PrayerScheduleData>,
+    modifier: Modifier = Modifier,
+    onRequestSchedule: (month: Int, year: Int) -> Unit
 ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(100) }
@@ -48,9 +52,7 @@ fun IslamicCalendarComponent(
         firstDayOfWeekFromLocale(
             locale = Locale("in-ID")
         )
-
     }
-
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -59,13 +61,22 @@ fun IslamicCalendarComponent(
         firstDayOfWeek = firstDayOfWeek
     )
 
-
+    LaunchedEffect(state.firstVisibleMonth) {
+        onRequestSchedule(
+            state.firstVisibleMonth.yearMonth.month.ordinal + 1,
+            state.firstVisibleMonth.yearMonth.year
+        )
+    }
 
     HorizontalCalendar(
         modifier = modifier,
         state = state,
-        dayContent = {
-            Day(it, state.firstVisibleMonth.yearMonth, listOf(true, false).random())
+        dayContent = { calendar ->
+            val isHaveHoliday = monthSchedules.find {
+                it.georgianDate.day == calendar.date.day
+                        && it.georgianDate.month == calendar.date.month.ordinal + 1
+            }?.hijriDate?.holidays?.isNotEmpty() ?: false
+            Day(calendar, state.firstVisibleMonth.yearMonth, isHaveHoliday)
         },
         monthHeader = { month ->
             val daysOfWeek = month.weekDays.first().map { it.date.dayOfWeek }
@@ -202,7 +213,9 @@ private fun PreviewIslamicCalendarComponent() {
     MaterialTheme {
         Box(modifier = Modifier.fillMaxWidth().background(AppColor.Background)) {
             IslamicCalendarComponent(
-                modifier = Modifier.padding(32.dp)
+                monthSchedules = listOf(),
+                modifier = Modifier.padding(32.dp),
+                onRequestSchedule = { _, _ -> }
             )
         }
     }

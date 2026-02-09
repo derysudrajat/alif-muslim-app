@@ -13,7 +13,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class IosLocationService : LocationService {
-    private val locationManager = CLLocationManager()
+    private val locationManager by lazy { CLLocationManager() }
 
     // 1. Keep a strong reference to the delegate here!
     // If it's a local variable inside the function, it gets garbage collected.

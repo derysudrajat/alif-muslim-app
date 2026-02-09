@@ -21,7 +21,12 @@ import id.derysudrajat.alif.ui.themes.AppColor
 import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 
 @Composable
-fun IslamicEventItem() {
+fun IslamicEventItem(
+    eventName: String,
+    dateHijri: String,
+    dateGeorgian: String,
+    monthGeorgian: String
+) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -34,7 +39,7 @@ fun IslamicEventItem() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "21", color = AppColor.Primary.Main,
+                text = dateGeorgian, color = AppColor.Primary.Main,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -43,20 +48,20 @@ fun IslamicEventItem() {
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "1st Day of Ramadhan",
+                text = eventName,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = AppColor.Text
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "1 Ramadhan 1442 H",
+                text = dateHijri,
                 style = MaterialTheme.typography.bodySmall,
                 color = AppColor.Text.copy(0.6f)
             )
         }
         Text(
-            text = "Aug, 2026",
+            text = monthGeorgian,
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
             color = AppColor.Text
@@ -68,6 +73,11 @@ fun IslamicEventItem() {
 @Composable
 private fun PreviewIslamicEventItem() {
     Box(modifier = Modifier.background(AppColor.Background)) {
-        IslamicEventItem()
+        IslamicEventItem(
+            dateGeorgian = "21",
+            eventName = "1st Day of Ramadhan",
+            dateHijri = "1 Ramadhan 1442 H",
+            monthGeorgian = "Aug, 2026"
+        )
     }
 }

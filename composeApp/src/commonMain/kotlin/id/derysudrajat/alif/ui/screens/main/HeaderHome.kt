@@ -23,14 +23,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import id.derysudrajat.alif.ui.themes.AppColor
 import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun HeaderHome() {
+fun HeaderHome(
+    modifier: Modifier = Modifier,
+    georgianDate: String,
+    hijriDate: String,
+    goToQuran: () -> Unit,
+    goToCompass: () -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().background(AppColor.Background)
+        modifier = modifier.fillMaxWidth().background(AppColor.Background)
             .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -39,7 +46,7 @@ fun HeaderHome() {
             colors = CardDefaults.cardColors(
                 containerColor = AppColor.Gray.copy(0.4f)
             ),
-            onClick = {}
+            onClick = goToQuran
         ) {
             Box(modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center) {
                 Image(
@@ -54,8 +61,10 @@ fun HeaderHome() {
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Fri, 22 July 2022",
-                style = MaterialTheme.typography.titleLarge,
+                text = georgianDate,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 20.sp
+                ),
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 color = AppColor.Text,
@@ -64,10 +73,10 @@ fun HeaderHome() {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "22 Dhu al-Hijjah 1443 AH",
+                text = hijriDate,
                 maxLines = 1,
                 color = AppColor.Text.copy(0.6f),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -78,7 +87,7 @@ fun HeaderHome() {
             colors = CardDefaults.cardColors(
                 containerColor = AppColor.Gray.copy(0.4f)
             ),
-            onClick = {}
+            onClick = goToCompass
         ) {
             Box(modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center) {
                 Image(
@@ -96,6 +105,11 @@ fun HeaderHome() {
 @Composable
 private fun PreviewHeaderHome() {
     MaterialTheme {
-        HeaderHome()
+        HeaderHome(
+            georgianDate = "Fri, 22 July 2022",
+            hijriDate = "22 Dhu al-Hijjah 1443 AH",
+            goToQuran = {},
+            goToCompass = {}
+        )
     }
 }

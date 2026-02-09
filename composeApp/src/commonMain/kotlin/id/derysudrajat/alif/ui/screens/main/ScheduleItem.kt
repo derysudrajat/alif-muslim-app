@@ -20,12 +20,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import id.derysudrajat.alif.domain.model.PrayerData
+import id.derysudrajat.alif.domain.model.TimingSchedule
 import id.derysudrajat.alif.ui.themes.AppColor
 import id.derysudrajat.alif.utils.PreviewLightDarkWithBackground
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
+fun ScheduleCard(
+    timingSchedule: TimingSchedule,
+    nearestSchedule: PrayerData
+) {
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        mapOf(
+            "Imsak" to timingSchedule.imsak,
+            "Fajr" to timingSchedule.fajr,
+            "Sunrise" to timingSchedule.sunrise,
+            "Dhuhr" to timingSchedule.dhuhr,
+            "Asr" to timingSchedule.asr,
+            "Maghrib" to timingSchedule.maghrib,
+            "Isha" to timingSchedule.isha,
+        ).onEach { map ->
+            ScheduleItem(
+                scheduleName = map.key,
+                scheduleTime = map.value.time,
+                isActive = map.value == nearestSchedule && map != PrayerData.Empty && nearestSchedule != PrayerData.Empty
+            )
+        }
+    }
+}
+
+@Composable
 fun ScheduleItem(
+    scheduleName: String,
+    scheduleTime: String,
     isActive: Boolean = false
 ) {
     OutlinedCard(
@@ -43,12 +71,12 @@ fun ScheduleItem(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Dzuhur",
+                text = scheduleName,
                 color = AppColor.Text,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "17:46 (WIB)",
+                text = scheduleTime,
                 color = AppColor.Text,
             )
             Image(
@@ -68,8 +96,15 @@ private fun PreviewScheduleItem() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                ScheduleItem(true)
-                ScheduleItem()
+                ScheduleItem(
+                    scheduleName = "",
+                    scheduleTime = "",
+                    isActive = true
+                )
+                ScheduleItem(
+                    scheduleName = "",
+                    scheduleTime = ""
+                )
             }
         }
     }
